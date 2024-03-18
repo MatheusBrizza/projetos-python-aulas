@@ -16,7 +16,9 @@ while True:
             print(saldo)
         case 2:
             saque = float(input("Digite o valor que deseja sacar na conta: "))
-            if saldo <= 0:
+            if saque <= 0:
+                print("não pode sacar valor negativo nem 0")
+            elif saldo <= 0:
                 print("saldo insuficiente!")
             else:
                 saldo -= saque 
