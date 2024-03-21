@@ -1,4 +1,8 @@
+# 14. Remover um Elemento de uma Lista
+
 listaNumerica = []
+numeroRemovido = 0
+
 while len(listaNumerica) < 5:
     try:
         numeros = int(input("Digite um número: "))
@@ -9,4 +13,11 @@ while len(listaNumerica) < 5:
     except NameError and ValueError as error:
         print("não pode deixar em branco!")
 print(listaNumerica)
-print(f"O menor número da lista é: {min(listaNumerica)}")
+while True:
+    numeroRemovido = int(input("Escolha um número da lista para remover: "))
+    if numeroRemovido in listaNumerica:
+        listaNumerica.remove(numeroRemovido)
+        break
+    else:
+        print("número não está na lista")
+print(f"Lista atualizada: {listaNumerica}")

@@ -1,3 +1,5 @@
+# 10. Inverter a Ordem dos Elementos de uma Lista
+
 listaNumerica = []
 while len(listaNumerica) < 5:
     try:
@@ -8,5 +10,5 @@ while len(listaNumerica) < 5:
         listaNumerica.append(numeros)
     except NameError and ValueError as error:
         print("não pode deixar em branco!")
-print(listaNumerica)
-print(f"O menor número da lista é: {min(listaNumerica)}")
+listaOrdenada = sorted(listaNumerica, reverse=True)
+print(listaOrdenada)

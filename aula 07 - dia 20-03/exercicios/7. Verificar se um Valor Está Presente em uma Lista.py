@@ -1,3 +1,5 @@
+# 7. Verificar se um Valor Está Presente em uma Lista
+
 listaNumerica = []
 while len(listaNumerica) < 5:
     try:
@@ -8,5 +10,8 @@ while len(listaNumerica) < 5:
         listaNumerica.append(numeros)
     except NameError and ValueError as error:
         print("não pode deixar em branco!")
-print(listaNumerica)
-print(f"O menor número da lista é: {min(listaNumerica)}")
+numeroRepetido = int(input("digite um número que deseja ver se ele está na lista: "))
+if listaNumerica.count(numeroRepetido) != 0:
+    print(f"O número {numeroRepetido} se encontra na lista.")
+else:
+    print(f"O número {numeroRepetido} não se encontra na lista.")
