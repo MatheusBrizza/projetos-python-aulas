@@ -41,7 +41,11 @@ while True:
            if opercao_listas=="01":
              print("##################################Adição##################################")
              print("Você pode adicionar elementos ao final da lista usando o método append() ou inserir elementos em qualquer posição usando o método insert().")
+             print("Exemplo da lista antes da modificação:")
              print("Adicionando um elemento ao final da lista usando o método append(): lista.append('Tiburcio')")
+             # Imprimindo a lista antes de atualizar
+             print("Imprimindo a lista antes da modificação")
+             print(lista_nomes)
               # Adicionando um elemento ao final da lista usando o método append()
              lista_nomes.append('Tiburcio')
              print("Imprimindo a lista atualizada:print(lista)")
@@ -49,6 +53,9 @@ while True:
              print(lista_nomes)  
              # Saída: ["Lucas", "Rodolfo", "Aristeu", "Tiburcio"]
              print("inserindo um elemento em uma posição específica usando o método insert(): lista.insert(1, 'Edesvom')")
+             # Imprimindo a lista antes de atualizar
+             print("Imprimindo a lista antes da modificação")
+             print(lista_nomes)
               # Inserindo um elemento em uma posição específica usando o método insert()
              lista_nomes.insert(1, 'Edesvom')
              print("Imprimindo a lista atualizada: print(lista)")
@@ -59,7 +66,10 @@ while True:
              print("##################################Remoção##################################")
              print("Você pode remover elementos da lista usando o método remove() ou o método pop().")
              print("Removendo um elemento específico da lista usando o método remove() :lista_nomes.remove('Lucas')")
-             # Removendo um elemento específico da lista usando o método remove()
+              # Imprimindo a lista antes de atualizar
+             print("Imprimindo a lista antes da modificação")
+             print(lista_nomes)
+              # Removendo um elemento específico da lista usando o método remove()
              lista_nomes.remove('Lucas')
              print("Imprimindo a lista atualizada: print(lista_nomes)")
              # Imprimindo a lista atualizada
