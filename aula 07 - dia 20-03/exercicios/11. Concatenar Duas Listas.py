@@ -1,24 +1,38 @@
 # 11. Concatenar Duas Listas
 lista1 = []
-while len(lista1) < 5:
-    try:
-        numeros = int(input("Digite um número: "))
-        if len(lista1) > 5:
-            print("Limite de 5 itens excedido. Tente novamente.")
-            continue
-        lista1.append(numeros)
-    except NameError and ValueError as error:
-        print("não pode deixar em branco!")
-print(f"primeira lista: {lista1}")
 lista2 = []
-while len(lista2) < 5:
-    try:
-        numeros = int(input("Digite um número: "))
-        if len(lista2) > 5:
-            print("Limite de 5 itens excedido. Tente novamente.")
-            continue
-        lista2.append(numeros)
-    except NameError and ValueError as error:
-        print("não pode deixar em branco!")
+numeros = ''
+
+while True:
+  tecla_parada = input("Pressione uma tecla para parar de agregar números à lista: ")
+  if not tecla_parada.isdigit():#A função isdigit() verifica se a string digitada é composta apenas por dígitos. Se a string digitada for um número inteiro, uma mensagem de erro é exibida e o usuário é solicitado a digitar novamente.
+    break
+  else:
+    print("Digite uma tecla, não um número.")
+
+print("Sua tecla para parar é:", tecla_parada)
+while True:
+    numeros = input("Digite um número: ")
+    if numeros == tecla_parada:
+        print("Fechando lista...")
+        break
+    elif not numeros.isdigit():
+        print('Não pode adicionar letras ou espaços vazios à lista')
+        continue
+    numeros = int(numeros)
+    lista1.append(numeros)
+print(f"primeira lista: {lista1}")
+
+while True:
+    numeros = input("Digite um número: ")
+    if numeros == tecla_parada:
+        print("Fechando lista...")
+        break
+    elif not numeros.isdigit():
+        print('Não pode adicionar letras ou espaços vazios à lista')
+        continue
+    numeros = int(numeros)
+    lista2.append(numeros)
 print(f"segunda lista: {lista2}")
+    
 print(f"juntando as duas listas fica assim: {lista1 + lista2}")
