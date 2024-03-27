@@ -1,13 +1,13 @@
 #3. Encontrar a Média dos Valores em uma Lista
 
 listaNumerica = []
-numeros = ''
+
 while True:
-  tecla_parada = input("Pressione uma tecla para parar de agregar números à lista: ")
-  if not tecla_parada.isdigit():
-    break
-  else:
-    print("Digite uma tecla, não um número.")
+    tecla_parada = input("Pressione uma tecla para parar de agregar números à lista: ")
+    if not tecla_parada.isdigit():
+        break
+    else:
+        print("Digite uma tecla, não um número.")
 
 print("Sua tecla para parar é:", tecla_parada)
 while True:

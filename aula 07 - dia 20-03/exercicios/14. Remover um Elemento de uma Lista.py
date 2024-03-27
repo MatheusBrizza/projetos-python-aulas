@@ -2,19 +2,30 @@
 
 listaNumerica = []
 numeroRemovido = 0
+while True:
+    tecla_parada = input("Pressione uma tecla para parar de agregar números à lista: ")
+    if not tecla_parada.isdigit():
+        break
+    else:
+        print("Digite uma tecla, não um número.")
 
-while len(listaNumerica) < 5:
-    try:
-        numeros = int(input("Digite um número: "))
-        if len(listaNumerica) > 5:
-            print("Limite de 5 itens excedido. Tente novamente.")
-            continue
-        listaNumerica.append(numeros)
-    except NameError and ValueError as error:
-        print("não pode deixar em branco!")
+while True:
+    numeros = input("Digite um número: ")
+    if numeros == tecla_parada:
+        print("Fechando lista...")
+        break
+    elif not numeros.isdigit():
+        print('Não pode adicionar letras ou espaços vazios à lista')
+        continue
+    numeros = int(numeros)
+    listaNumerica.append(numeros)
 print(listaNumerica)
 while True:
-    numeroRemovido = int(input("Escolha um número da lista para remover: "))
+    try:
+        numeroRemovido = int(input("Escolha um número da lista para remover: "))
+    except ValueError:
+        print("não pode deixar em branco!")
+        continue
     if numeroRemovido in listaNumerica:
         listaNumerica.remove(numeroRemovido)
         break

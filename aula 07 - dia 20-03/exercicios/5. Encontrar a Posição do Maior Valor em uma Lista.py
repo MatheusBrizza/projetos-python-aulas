@@ -1,12 +1,13 @@
 # 5. Encontrar a Posição do Maior Valor em uma Lista
+
 listaNumerica = []
-numeros = ''
+
 while True:
-  tecla_parada = input("Pressione uma tecla para parar de agregar números à lista: ")
-  if not tecla_parada.isdigit():#A função isdigit() verifica se a string digitada é composta apenas por dígitos. Se a string digitada for um número inteiro, uma mensagem de erro é exibida e o usuário é solicitado a digitar novamente.
-    break
-  else:
-    print("Digite uma tecla, não um número.")
+    tecla_parada = input("Pressione uma tecla para parar de agregar números à lista: ")
+    if not tecla_parada.isdigit():#A função isdigit() verifica se a string digitada é composta apenas por dígitos. Se a string digitada for um número inteiro, uma mensagem de erro é exibida e o usuário é solicitado a digitar novamente.
+        break
+    else:
+        print("Digite uma tecla, não um número.")
 
 print("Sua tecla para parar é:", tecla_parada)
 while True:
