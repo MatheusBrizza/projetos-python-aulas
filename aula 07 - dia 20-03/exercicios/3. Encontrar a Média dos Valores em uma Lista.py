@@ -21,7 +21,10 @@ while True:
     numeros = int(numeros)
     listaNumerica.append(numeros)
 try:
-    mediaListaNumerica = sum(listaNumerica) / len(listaNumerica)
-    print(f"A média dos valores da lista {listaNumerica} = {mediaListaNumerica}")
+    if len(listaNumerica) < 2:
+        print("Não é possível verificar a média da lista com apenas 1 elemento")
+    else:
+        mediaListaNumerica = sum(listaNumerica) / len(listaNumerica)
+        print(f"A média dos valores da lista {listaNumerica} = {mediaListaNumerica}")
 except ValueError and NameError and ZeroDivisionError as error:
     print("Lista está vazia")

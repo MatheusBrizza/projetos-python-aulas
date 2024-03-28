@@ -11,7 +11,7 @@ while True:
 
 while True:
     numeros = input("Digite um número: ")
-    if numeros == tecla_parada:
+    if numeros == tecla_parada and listaNumerica != []:
         print("Fechando lista...")
         break
     elif not numeros.isdigit():

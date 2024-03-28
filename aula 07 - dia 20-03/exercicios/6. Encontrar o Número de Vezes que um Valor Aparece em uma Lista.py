@@ -4,7 +4,7 @@ listaNumerica = []
 
 while True:
     tecla_parada = input("Pressione uma tecla para parar de agregar números à lista: ")
-    if not tecla_parada.isdigit():#A função isdigit() verifica se a string digitada é composta apenas por dígitos. Se a string digitada for um número inteiro, uma mensagem de erro é exibida e o usuário é solicitado a digitar novamente.
+    if not tecla_parada.isdigit():
         break
     else:
         print("Digite uma tecla, não um número.")
@@ -21,7 +21,10 @@ while True:
     numeros = int(numeros)
     listaNumerica.append(numeros)
 try:
-    numeroRepetido = int(input("digite um número que deseja ver quantas vezes foi repetido: "))
-    print(f"O número {numeroRepetido} se repetiu na lista {listaNumerica}: {listaNumerica.count(numeroRepetido)} vezes")
+    if len(listaNumerica) < 2:
+        print("Não é possível ver número repetído com apenas 1 elemento.")
+    else:
+        numeroRepetido = int(input("digite um número que deseja ver quantas vezes foi repetido: "))
+        print(f"O número {numeroRepetido} se repetiu na lista {listaNumerica}: {listaNumerica.count(numeroRepetido)} vezes")
 except ValueError as error:
     print("lista está vazia")

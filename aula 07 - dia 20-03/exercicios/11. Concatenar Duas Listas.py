@@ -13,7 +13,7 @@ while True:
 print("Sua tecla para parar é:", tecla_parada)
 while True:
     numeros = input("Digite um número: ")
-    if numeros == tecla_parada:
+    if numeros == tecla_parada and lista1 != []:
         print("Fechando lista...")
         break
     elif not numeros.isdigit():
@@ -21,11 +21,11 @@ while True:
         continue
     numeros = int(numeros)
     lista1.append(numeros)
-print(f"primeira lista: {lista1}")
+    
 
 while True:
     numeros = input("Digite um número: ")
-    if numeros == tecla_parada:
+    if numeros == tecla_parada and lista2 != []:
         print("Fechando lista...")
         break
     elif not numeros.isdigit():

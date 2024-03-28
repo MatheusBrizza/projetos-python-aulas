@@ -21,10 +21,13 @@ while True:
     numeros = int(numeros)
     listaNumerica.append(numeros)
 try:
-    numeroRepetido = int(input("digite um número que deseja ver se ele está na lista: "))
-    if listaNumerica.count(numeroRepetido) != 0:
-        print(f"O número {numeroRepetido} se encontra na lista.")
+    if len(listaNumerica) < 2:
+        print("Não é certo verificar um valor com apenas 1 elemento na lista.")
     else:
-        print(f"O número {numeroRepetido} não se encontra na lista.")
+        numeroRepetido = int(input("digite um número que deseja ver se ele está na lista: "))
+        if listaNumerica.count(numeroRepetido) != 0:
+            print(f"O número {numeroRepetido} se encontra na lista.")
+        else:
+            print(f"O número {numeroRepetido} não se encontra na lista.")
 except ValueError as error:
     print("lista está vazia")

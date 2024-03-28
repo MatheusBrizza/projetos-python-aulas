@@ -1,7 +1,7 @@
 # 1. Encontrar o Maior Valor em uma Lista
 
 listaNumerica = []
-listaQuantidadeVezes = []
+
 while True:
     tecla_parada = input("Pressione uma tecla para parar de agregar números à lista: ")
     if not tecla_parada.isdigit():
@@ -12,21 +12,14 @@ while True:
 print("Sua tecla para parar é:", tecla_parada)
 while True:
     numeros = input("Digite um número: ")
-    if numeros == tecla_parada:
-        print(f"Fechando lista... {listaNumerica}")
+    if numeros == tecla_parada and listaNumerica != []:
+        print(f"Fechando lista...")
         break
     elif not numeros.isdigit():
         print('Não pode adicionar letras ou espaços vazios à lista')
         continue
     numeros = int(numeros)
     listaNumerica.append(numeros)
-    quantidadeVezes = listaNumerica.count(numeros)
-    listaQuantidadeVezes.append(quantidadeVezes)
-
-print(quantidadeVezes)
-print(listaQuantidadeVezes)
-
-
 
 try:
     if len(listaNumerica) < 2:

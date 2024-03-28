@@ -21,5 +21,8 @@ while True:
     numeros = int(numeros)
     listaNumerica.append(numeros)
 
-listaOrdenada = sorted(listaNumerica, reverse=True)
-print(listaOrdenada)
+if len(listaNumerica) < 2:
+    print("não se pode inverter a lista com apenas 1 elemento.")
+else:
+    listaOrdenada = sorted(listaNumerica, reverse=True)
+    print(listaOrdenada)

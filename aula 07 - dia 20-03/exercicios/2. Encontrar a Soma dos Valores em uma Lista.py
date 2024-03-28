@@ -21,6 +21,9 @@ while True:
     numeros = int(numeros)
     listaNumerica.append(numeros)
 try:
-    print(f"A soma dos valores da lista {listaNumerica} = {sum(listaNumerica)}")
+    if len(listaNumerica) < 2:
+        print("não pode realizar a soma dos elementos da lista com apenas 1 elemento")
+    else:
+        print(f"A soma dos valores da lista {listaNumerica} = {sum(listaNumerica)}")
 except ValueError as error:
     print(f"lista está vazia!")

@@ -21,7 +21,10 @@ while True:
     numeros = int(numeros)
     listaNumerica.append(numeros)
 try:
-    posicaoMenorNumeroLista = listaNumerica.index(min(listaNumerica))
-    print(f"A posição do menor número da lista ({min(listaNumerica)}) = posição {posicaoMenorNumeroLista} na lista")
+    if len(listaNumerica) < 2:
+        print("Não é certo verificar o menor número com apenas 1 elemento na lista")
+    else:
+        posicaoMenorNumeroLista = listaNumerica.index(min(listaNumerica))
+        print(f"A posição do menor número da lista ({min(listaNumerica)}) = posição {posicaoMenorNumeroLista} na lista")
 except ValueError as error:
     print("lista está vazia")
