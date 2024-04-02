@@ -37,17 +37,15 @@ while True:
 conjuntoNumerico2 = set(listaNumerica2)
 
 #método com for e if
-# while True:
-#     numeroRepetido = int(input("digite um número que deseja ver se está em ambos os conjuntos: "))
-#     for numeroRepetido in conjuntoNumerico1:
-#         for numeroRepetido in conjuntoNumerico2:
-#             if numeroRepetido in conjuntoNumerico1 and numeroRepetido in conjuntoNumerico2:
-#                 print(f"{numeroRepetido} está em ambos os conjuntos")
-#                 break
-#             else:
-#                 print(f"{numeroRepetido} não está nas listas")
+listaIntersection = []
+for numero in listaNumerica1:
+    for numero in listaNumerica2:
+        print(numero)
+        if numero in listaNumerica1 and numero in listaNumerica2:
+            listaIntersection.append(numero)
+conversorListaConjunto = set(listaIntersection)
+print(conversorListaConjunto)
 
 #método com intersection()
-
-numeroConjuntoIntersection = conjuntoNumerico1.intersection(conjuntoNumerico2)
-print(f"O(s) número(s) que faz(em) intercessão  nos conjuntos é/são: {numeroConjuntoIntersection}")
+# numeroConjuntoIntersection = conjuntoNumerico1.intersection(conjuntoNumerico2)
+# print(f"O(s) número(s) que faz(em) intercessão  nos conjuntos é/são: {numeroConjuntoIntersection}")

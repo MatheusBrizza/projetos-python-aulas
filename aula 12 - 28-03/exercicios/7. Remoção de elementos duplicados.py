@@ -23,8 +23,7 @@ while True:
     numeros = int(numeros)
     listaNumerica.append(numeros)
 
-
-
+conversorListaConjunto = set(listaNumerica)
 for numeroRepetido in listaNumerica:
     if listaNumerica.count(numeroRepetido) > 1:
         listaNumerica.remove(numeroRepetido)

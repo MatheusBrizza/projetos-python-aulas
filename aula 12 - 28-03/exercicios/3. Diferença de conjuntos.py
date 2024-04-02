@@ -37,17 +37,12 @@ while True:
 conjuntoNumerico2 = set(listaNumerica2)
 
 #método com for e if
-# while True:
-#     numeroRepetido = int(input("digite um número que deseja ver se está em ambos os conjuntos: "))
-#     for numeroRepetido in conjuntoNumerico1:
-#         for numeroRepetido in conjuntoNumerico2:
-#             if numeroRepetido not in conjuntoNumerico1 and numeroRepetido not in conjuntoNumerico2:
-#                 print(f"{numeroRepetido} não está em ambos os conjuntos")
-#                 break
-#             else:
-#                 print(f"{numeroRepetido} está nas listas")
+listaDifference = []
+for numero in listaNumerica1:
+    if numero in listaNumerica1 and numero not in listaNumerica2 or numero not in listaNumerica1 and numero in listaNumerica2:
+        print(f"{numero}")
 
  
 #método difference()
-numerosConjuntoDifference = conjuntoNumerico1.symmetric_difference(conjuntoNumerico2)
-print(f"os números que não tem nos conjuntos são: {numerosConjuntoDifference}")
+# numerosConjuntoDifference = conjuntoNumerico1.symmetric_difference(conjuntoNumerico2)
+# print(f"os números que não tem nos conjuntos são: {numerosConjuntoDifference}")
