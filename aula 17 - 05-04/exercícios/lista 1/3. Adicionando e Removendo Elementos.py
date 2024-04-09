@@ -11,8 +11,8 @@ de lançamento".
 '''
 
 alunoDict = {}
-alunoDict = {"nome":"matheus", "idade":39}
-
+alunoDict["nome"] = "matheus"
+alunoDict["idade"] = 15
 
 print(f"dicionário aluno -> {alunoDict}")
 
