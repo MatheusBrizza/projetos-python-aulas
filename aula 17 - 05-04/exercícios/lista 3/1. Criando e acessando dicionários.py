@@ -9,18 +9,24 @@ filme.
 '''
 filmeDict = {}
 teclaParada = "-"
-principais_atores = []
 while True:
     chave = input("digite o chave: ")
     if chave != teclaParada:
         if chave == 'principais_atores':
-            valorLista = input("digite o valor que deseja inserir na chave: ").split(' ')
-            principais_atores.append(valorLista)
-            filmeDict.update(principais_atores)
+            valorLista = input("lista de atores: ").split(' ')
+            filmeDict[chave] = valorLista
         else:
             valor = input("digite o valor que deseja inserir na chave: ")
             filmeDict[chave] = valor
     else:
         break
 print(filmeDict)
+
+anoFilme = filmeDict.get("ano", "não tem chave 'ano'")
+print(anoFilme)
+
+diretorNovo = input("Informe o nome do novo diretor: ")
+filmeDict["diretor"] = diretorNovo
+
+
 # 'titulo': 'Corram que a Polícia Vem Aí!', 'diretor': 'David Zuker', 'genero': 'ação/comédia', 'principais_atores':[Leslie Nielsen, Priscilla Presley]
