@@ -11,8 +11,8 @@ while True:
         num3 = int(input("informe o terceiro número: "))
         calcularMediaTresElementos(num1, num2, num3)
         break
-    except ValueError and NameError:
-        print("não pode calcular a média dos 3 elementos pois um ou mais elementos não foram informados.")
+    except ValueError:
+        print("é necessário que os 3 elementos sejam números para calcular a média.")
         
     def calcularMediaTresElementos(x, y, z):
         media = (x + y + z) / 3

@@ -20,6 +20,6 @@ while True:
         num2 = int(input("informe o segundo número: "))
         maiorEntreDuasVariaveis(num1, num2)
         break
-    except ValueError and NameError:
-        print("não pode averiguar qual o maior por falta de um dos elementos")
+    except ValueError:
+        print("é necessário que os 2 elementos sejam números para verificar qual o maior")
         

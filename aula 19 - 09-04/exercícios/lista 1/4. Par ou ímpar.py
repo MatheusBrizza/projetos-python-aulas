@@ -6,12 +6,12 @@ número for par e False se for ímpar.
 
 def isPar(x):
     if x % 2 == 0:
-        print(True)
+        print(f"este número é par? {True}")
     else:
-        print(False)
+        print(f"este número é par? {False}")
 
 try:
-    num = int(input("informe o primeiro número: "))
+    num = int(input("informe um número para verificar se é par ou ímpar: "))
     isPar(num)
-except NameError and ValueError:
-    print("não pode fazer a verificação porque não foi passado nenhum número")
+except ValueError:
+    print("é necessário que digite um número para verificar se é par ou ímpar")
