@@ -18,6 +18,8 @@ class Veiculo:
         self.motorLigado = False
         self.velocidade = 0
 
+    def descrever(self):
+        print(f"marca:{self.marca}, modelo:{self.modelo}, ano:{self.ano}")
     # Implemente métodos ligar(), desligar(), acelerar(), frear() e descrever() nas 
     # classes Veiculo e Carro.        
     def ligar(self):
@@ -59,7 +61,8 @@ class Carro(Veiculo):
 # Implemente métodos ligar(), desligar(), acelerar(), frear() e descrever() nas 
 # classes Veiculo e Carro.
     def descrever(self):
-        print(f"marca:{self.marca}, modelo:{self.modelo}, ano:{self.ano}, cor:{self.cor}, numero de portas:{self.numero_portas}, tipo de câmbio:{self.tipo_cambio} ")
+        super().descrever()
+        print(f"cor:{self.cor}, numero de portas:{self.numero_portas}, tipo de câmbio:{self.tipo_cambio}")
 
 # Crie um objeto carro1 e chame os métodos adequados.
 carro1 = Carro("vw", "corsa", 2020, "azul", 5, "manual")
@@ -74,3 +77,4 @@ carro1.frear()
 carro1.frear()
 carro1.desligar()
 carro1.acelerar()
+carro1.descrever()
