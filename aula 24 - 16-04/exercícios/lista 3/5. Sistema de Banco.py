@@ -17,9 +17,9 @@ Utilize o cheque especial da Conta Corrente (se disponível).
 # Conta (classe base com atributos titular, saldo e 
 # métodos depositar(), sacar() e consultar_saldo()). 
 class Conta:
-    def __init__(self, titular, saldo):
+    def __init__(self, titular):
         self.titular = titular
-        self.saldo = saldo
+        self.saldo = 0
         
     def depositar(self, valor_depositado):
         if valor_depositado <= 0:
@@ -54,4 +54,14 @@ class ContaCorrente(Conta):
     def __init__(self, titular, saldo, limite_cheque_especial):
         super().__init__(titular, saldo)
         self.limite_cheque_especial = limite_cheque_especial
-        
+    
+# Crie contas para diferentes clientes: 
+# Conta Poupança e Conta Corrente.
+conta_poupanca = ContaPoupanca("fulano", 0, 0.06)
+conta_corrente = ContaCorrente("siclano", 0, 500)
+# Realize operações: 
+# Deposite e saque valores em cada conta.
+
+# Consulte o saldo de cada conta.
+# Renda juros na Conta Poupança (se aplicável).
+# Utilize o cheque especial da Conta Corrente (se disponível).
