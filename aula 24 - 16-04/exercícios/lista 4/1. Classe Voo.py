@@ -45,7 +45,7 @@ class Voo:
     # mostrar_informacoes: Imprime as informações do voo (código, 
     # companhia, origem, destino, horários, preço com desconto).
     def mostrar_informacoes(self):
-        print(f"código do vôo:{self.__codigo}, companhia aérea:{self.__companhia}")
+        print(f"código do vôo:{self.__codigo}, companhia aérea:{self.__companhia}, origem:{self.__origem}, destino:{self.__destino}, horário de saída:{self.__horario_saida}, horário de chegada:{self.__horario_chegada}, preço da passagem:{self.__preco_passagem}")
 voo1 = Voo(123,"azul", "poa", "vaimao", 9, 19, 500.00)
 voo1.calcular_duracao_voo()
 voo1.aplicar_desconto()
