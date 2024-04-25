@@ -15,7 +15,7 @@ class Veiculo:
         self.marca = marca
         self.modelo = modelo
         self.ano = ano
-        self.motorLigado = False
+        self.motor = False
         self.velocidade = 0
 
     def descrever(self):
@@ -23,21 +23,21 @@ class Veiculo:
     # Implemente métodos ligar(), desligar(), acelerar(), frear() e descrever() nas 
     # classes Veiculo e Carro.        
     def ligar(self):
-        if self.motorLigado == True:
+        if self.motor == True:
             print("veículo já está ligado!")
         else:
-            self.motorLigado = True
+            self.motor = True
             print("veículo ligado")
     
     def desligar(self):
-        if self.motorLigado == False:
+        if self.motor == False:
             print("veículo já está desligado!")
         else:
-            self.motorLigado = False
+            self.motor = False
             print("veículo desligado")
     
     def acelerar(self):
-        if self.motorLigado == False:
+        if self.motor == False:
             print("não é possível acelerar com o motor desligado!")
         else:
             self.velocidade += 10
