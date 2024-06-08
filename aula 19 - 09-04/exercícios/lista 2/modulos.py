@@ -40,6 +40,8 @@ def maiorEntreNumeroVariaveis():
             if i > maior:
                 maior = i
             elif i == maior:
+#                listaMaiores.remove(i for i in range(0, len(listaMaiores)))
+                listaMaiores.append(maior)
                 listaMaiores.append(i)
         print(listaMaiores)
         return print(f"O maior valor da lista é: {maior}")
