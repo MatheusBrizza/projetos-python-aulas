@@ -156,11 +156,6 @@ botao_salvar_texto = tk.Button(frame_salvar_carregar, text="Criar novo arquivo",
 botao_salvar_texto.pack(pady=5)
 
 
-
-
-
-
-
 # Criar área de texto para exibir a mensagem de status
 mensagem_status = tk.Label(janela, text="")
 mensagem_status.pack(pady=5)
