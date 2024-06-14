@@ -11,13 +11,19 @@ tamanho_pizzas = ["Pequena", "Média", "Grande", "Familia"]
 precos_pizzas = {"Pequena": 30, "Média": 50, "Grande": 70, "Família": 80}
 
 ingredientes_adicionais = ["Catupiry", "Maionese caseira", "Ketchup", "Borda recheada"]
+ingredientes_adicionais_select = []
 precos_adicionais = {"Catupiry": 5, "Maionese caseira": 7, "Ketchup": 5, "Borda recheada": 10}
 
 def valorTotal():
     tamanho = selecao_tamanho.get()
     quantidade = int(quantidade_pizzas.get())
+    if quantidade < 0:
+        raise ValueError(label_valor_total.config(text="Não é permitido quantidades negativas"))
+    valorAdicionais = adicionarExtrasPedido()
+    print(ingredientes_adicionais_select)
+    print(valorAdicionais)
     if tamanho == "Pequena":
-        valorTotalPequena = (quantidade * precos_pizzas.get("Pequena"))
+        valorTotalPequena = (quantidade * precos_pizzas.get("Pequena")) + valorAdicionais
         label_valor_total.config(text=f"Valor total é R${valorTotalPequena:.2f}")
     elif tamanho == "Média":
         valorTotalMedia = quantidade * precos_pizzas.get("Média")
@@ -29,34 +35,20 @@ def valorTotal():
         valorTotalFamilia = quantidade * precos_pizzas.get("Família")
         label_valor_total.config(text=f"Valor total é R${valorTotalFamilia:.2f}")
 
-''' #Não funciona
 def adicionarExtrasPedido():
-    queijo_selecionado = var.get()
-    presunto_selecionado = var2.get()
-    maionese_selecionado = var3.get()
-    ketchup_selecionado = var4.get()
-    
-    if queijo_selecionado:
-        valorTotalAdicionais =+ 5
-        print(valorTotalAdicionais)
-    else:
-        print("nada")
-    if presunto_selecionado:
-        valorTotalAdicionais =+ 5
-        print(valorTotalAdicionais)
-    else:
-        print("nada")
-    if maionese_selecionado:
-        valorTotalAdicionais =+ 5
-        print(valorTotalAdicionais)
-    else:
-        print("nada")
-    if ketchup_selecionado:
-        valorTotalAdicionais =+ 5
-        print(valorTotalAdicionais)
-    else:
-        print("nada")
-'''
+#    ingredientes = [ingrediente.get() for ingrediente in ingredientes_adicionais_select if ingrediente.get()]
+    valorTotalAdicionais = 0
+    for ingrediente in ingredientes_adicionais_select:
+        if ingrediente == "Catupiry":
+            valorTotalAdicionais =+ precos_adicionais.get("Catupiry")
+        elif ingrediente == "Maionese caseira":
+            valorTotalAdicionais =+ precos_adicionais.get("Maionese caseira")
+        elif ingrediente == "Ketchup":
+            valorTotalAdicionais =+ precos_adicionais.get("Ketchup")
+        elif ingrediente == "Borda recheada":
+            valorTotalAdicionais =+ precos_adicionais.get("Borda recheada")
+        return valorTotalAdicionais
+
 ''' #Não funcionou
 def apresentarValorUnitario(selecao_tamanho):
     tamanho = selecao_tamanho.get()
@@ -70,15 +62,12 @@ janela.title("Exercício 3: Escolha de Tamanho de Pizza")
 selecao_tamanho = tk.StringVar(janela)
 
 label_titulo = tk.Label(janela,text="Escolha o tamanho da Pizza!")
-label_titulo.pack(pady=5)
+label_titulo.pack(padx=10, pady=5)
 
 label_exibir_preco_unitario = tk.Label(janela, text="")
 label_exibir_preco_unitario.pack(pady=5)
 
 quantidade_pizzas = tk.Entry(janela)
-if quantidade_pizzas < 0:
-    raise ValueError:
-
 quantidade_pizzas.pack(padx=5, pady=5)
 
 menu_pizzas = tk.OptionMenu(janela, selecao_tamanho, *tamanho_pizzas)
@@ -99,10 +88,16 @@ checkbutton_maionese.pack()
 checkbutton_ketchup.pack()
 '''
 
-botao_pedido = tk.Button(janela, text="Pedir", command=valorTotal)        
+
+for x in range(len(ingredientes_adicionais)):
+    var = tk.IntVar()
+    l = tk.Checkbutton(janela, text=ingredientes_adicionais[x], variable=var, command=lambda x=ingredientes_adicionais[x]: ingredientes_adicionais_select.append(x))
+    l.pack(anchor='w')
+
+botao_pedido = tk.Button(janela, text="Pedir", command=valorTotal)
 botao_pedido.pack()
 
 label_valor_total = tk.Label(janela, text="")
-label_valor_total.pack(pady=5)
+label_valor_total.pack(padx=10, pady=5)
 
 janela.mainloop()
