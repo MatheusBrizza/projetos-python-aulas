@@ -8,21 +8,24 @@ tamanho.
 import tkinter as tk
 
 tamanho_pizzas = ["Pequena", "Média", "Grande", "Familia"]
-precos_pizzas = {"Pequena": 30, "Média": 50, "Grande": 70, "Família": 80}
+precos_pizzas = {"Pequena": 30, "Média": 50, "Grande": 70, "Familia": 80}
 
 ingredientes_adicionais = ["Catupiry", "Maionese caseira", "Ketchup", "Borda recheada"]
 ingredientes_adicionais_select = []
 precos_adicionais = {"Catupiry": 5, "Maionese caseira": 7, "Ketchup": 5, "Borda recheada": 10}
 
 def valorTotal():
+    valorAdicionais = 0
     tamanho = selecao_tamanho.get()
     quantidade = int(quantidade_pizzas.get())
-    if quantidade < 0:
-        raise ValueError(label_valor_total.config(text="Não é permitido quantidades negativas"))
-    valorAdicionais = adicionarExtrasPedido()
+    if quantidade < 1:
+        raise ValueError(label_valor_total.config(text="Quantidade inválida"))
     print(ingredientes_adicionais_select)
     print(valorAdicionais)
-    if tamanho == "Pequena":
+    if tamanho in tamanho_pizzas:
+        valorTotal = quantidade * (precos_pizzas.get(tamanho) + valorAdicionais)
+        label_valor_total.config(text=f"Valor total é R${valorTotal:.2f}")
+'''    if tamanho == "Pequena":
         valorTotalPequena = (quantidade * precos_pizzas.get("Pequena")) + valorAdicionais
         label_valor_total.config(text=f"Valor total é R${valorTotalPequena:.2f}")
     elif tamanho == "Média":
@@ -34,32 +37,37 @@ def valorTotal():
     else:
         valorTotalFamilia = quantidade * precos_pizzas.get("Família")
         label_valor_total.config(text=f"Valor total é R${valorTotalFamilia:.2f}")
-
-def adicionarExtrasPedido():
+'''
+def adicionarExtrasPedido(ingrediente):
 #    ingredientes = [ingrediente.get() for ingrediente in ingredientes_adicionais_select if ingrediente.get()]
-    valorTotalAdicionais = 0
-    for ingrediente in ingredientes_adicionais_select:
-        if ingrediente == "Catupiry":
+    
+    if ingrediente in ingredientes_adicionais_select:
+        ingredientes_adicionais_select.remove(ingrediente)
+    else:
+        ingredientes_adicionais_select.append(ingrediente)
+        
+
+'''        if ingrediente == "Catupiry":
             valorTotalAdicionais =+ precos_adicionais.get("Catupiry")
         elif ingrediente == "Maionese caseira":
             valorTotalAdicionais =+ precos_adicionais.get("Maionese caseira")
         elif ingrediente == "Ketchup":
             valorTotalAdicionais =+ precos_adicionais.get("Ketchup")
         elif ingrediente == "Borda recheada":
-            valorTotalAdicionais =+ precos_adicionais.get("Borda recheada")
-        return valorTotalAdicionais
+            valorTotalAdicionais =+ precos_adicionais.get("Borda recheada")''' 
+    
 
-''' #Não funcionou
+
 def apresentarValorUnitario(selecao_tamanho):
-    tamanho = selecao_tamanho.get()
-    if tamanho == "Pequena":
-        print("foi")
-        label_exibir_preco_unitario.config(text=f'R${precos_pizzas.get("Pequena")}')
-'''
+    tamanho = selecao_tamanho
+    if tamanho in precos_pizzas:
+        label_exibir_preco_unitario.config(text=f"R$ {precos_pizzas[tamanho]:.2f}")
+    else:
+        label_exibir_preco_unitario.config(text="Tamanho inválido!")
+
 janela = tk.Tk()
 janela.title("Exercício 3: Escolha de Tamanho de Pizza")
 
-selecao_tamanho = tk.StringVar(janela)
 
 label_titulo = tk.Label(janela,text="Escolha o tamanho da Pizza!")
 label_titulo.pack(padx=10, pady=5)
@@ -70,7 +78,8 @@ label_exibir_preco_unitario.pack(pady=5)
 quantidade_pizzas = tk.Entry(janela)
 quantidade_pizzas.pack(padx=5, pady=5)
 
-menu_pizzas = tk.OptionMenu(janela, selecao_tamanho, *tamanho_pizzas)
+selecao_tamanho = tk.StringVar(janela)
+menu_pizzas = tk.OptionMenu(janela, selecao_tamanho, *tamanho_pizzas, command=apresentarValorUnitario)
 menu_pizzas.pack(pady=10)
 
 '''
@@ -91,7 +100,7 @@ checkbutton_ketchup.pack()
 
 for x in range(len(ingredientes_adicionais)):
     var = tk.IntVar()
-    l = tk.Checkbutton(janela, text=ingredientes_adicionais[x], variable=var, command=lambda x=ingredientes_adicionais[x]: ingredientes_adicionais_select.append(x))
+    l = tk.Checkbutton(janela, text=ingredientes_adicionais[x], variable=var, command=lambda x=ingredientes_adicionais[x]: adicionarExtrasPedido(x))
     l.pack(anchor='w')
 
 botao_pedido = tk.Button(janela, text="Pedir", command=valorTotal)

@@ -30,10 +30,11 @@ def adicionar_ingrediente(ingrediente):
     else:
         ingredientes_selecionados.append(ingrediente)
 
+
 def apresentar_valor_unitario(selecao_tamanho):
-    tamanho = selecao_tamanho.get()
+    tamanho = selecao_tamanho
     if tamanho in precos_pizzas:
-        label_exibir_preco_unitario.config(text=f"R$ {precos_pizzas[tamanho]}")
+        label_exibir_preco_unitario.config(text=f"R$ {precos_pizzas[tamanho]:.2f}")
     else:
         label_exibir_preco_unitario.config(text="Tamanho inválido!")
 
