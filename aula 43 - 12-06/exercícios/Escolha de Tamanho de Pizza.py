@@ -15,7 +15,7 @@ ingredientes_adicionais_select = []
 precos_adicionais = {"Catupiry": 5, "Maionese caseira": 7, "Ketchup": 5, "Borda recheada": 10}
 
 def valorTotal():
-    valorAdicionais = 0
+    valorAdicionais = sum(precos_adicionais[ingrediente] for ingrediente in ingredientes_adicionais_select)
     tamanho = selecao_tamanho.get()
     quantidade = int(quantidade_pizzas.get())
     if quantidade < 1:
@@ -43,10 +43,11 @@ def adicionarExtrasPedido(ingrediente):
     
     if ingrediente in ingredientes_adicionais_select:
         ingredientes_adicionais_select.remove(ingrediente)
+        valor =- precos_adicionais.get(ingrediente)
     else:
         ingredientes_adicionais_select.append(ingrediente)
-        
-
+        valor =+ precos_adicionais.get(ingrediente)
+    return valor
 '''        if ingrediente == "Catupiry":
             valorTotalAdicionais =+ precos_adicionais.get("Catupiry")
         elif ingrediente == "Maionese caseira":
