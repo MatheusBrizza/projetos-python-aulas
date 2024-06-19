@@ -21,14 +21,11 @@ def valorTotal():
     try:
         quantidade = int(quantidade_pizzas.get())
         if quantidade < 1:
-            raise ValueError(label_valor_total.config(text="Quantidade inválida"))
+            raise ValueError
     except ValueError:
         messagebox.showerror("Erro", "Quantidade inválida!")
-    print(ingredientes_adicionais_select)
-    print(valorAdicionais)
     if tamanho in tamanho_pizzas:
         valorTotal = quantidade * (precos_pizzas.get(tamanho) + valorAdicionais)
-        #label_valor_total.config(text=f"Valor total é R${valorTotal:.2f}")
     response = messagebox.askquestion("Confirmar pedido", f"Confirmar pedido de {quantidade} pizza(s) tamanho {tamanho} com extras {ingredientes_adicionais_select} no valor de R${valorTotal:.2f}?")
     if response == "yes":
         messagebox.showinfo("Pedido confirmado", "Pedido confirmado!")
@@ -37,9 +34,10 @@ def valorTotal():
         print(f"Quantidade: {quantidade}")
         print(f"Ingredientes extras: {ingredientes_adicionais_select}")
         print(f"Valor total: {valorTotal}")
-def adicionarExtrasPedido(ingrediente):
-#    ingredientes = [ingrediente.get() for ingrediente in ingredientes_adicionais_select if ingrediente.get()]
-    
+    else:
+        messagebox.showwarning("Pedido cancelado", "Pedido foi cancelado.")
+        
+def adicionarExtrasPedido(ingrediente):    
     if ingrediente in ingredientes_adicionais_select:
         ingredientes_adicionais_select.remove(ingrediente)
         valor =- precos_adicionais.get(ingrediente)
@@ -79,8 +77,5 @@ for x in range(len(ingredientes_adicionais)):
 
 botao_pedido = tk.Button(janela, text="Pedir", command=valorTotal)
 botao_pedido.grid(row=8, column=0)
-
-label_valor_total = tk.Label(janela, text="")
-label_valor_total.grid(row=9, column=0, padx=10, pady=5)
 
 janela.mainloop()
