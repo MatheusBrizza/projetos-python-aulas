@@ -66,12 +66,7 @@ if resultado_tb > 0:
     print(f"tabela {tb_pedidos} já existe!")
 else:
     print("criando tabela")
-    connector = mysql.connector.connect(
-        host='127.0.0.1',
-        user='root',
-        password='',
-        database= nome_db 
-    )
+    connector = mysql.connector.connect(host='127.0.0.1',user='root',password='',database= nome_db)
     executor_comando_sql = connector.cursor()
     executor_comando_sql.execute('CREATE TABLE pedidos (id INT AUTO_INCREMENT PRIMARY KEY, data DATETIME NOT NULL, tamanho VARCHAR(255),quantidade VARCHAR(255), valor_total DECIMAL(10,2) NOT NULL);')
     connector.commit()
@@ -99,22 +94,22 @@ def valorTotal():
     response = messagebox.askquestion("Confirmar pedido", f"Confirmar pedido de {quantidade} pizza(s) tamanho {tamanho} com extras {ingredientes_adicionais_select} no valor de R${valorTotal:.2f}?")
     if response == "yes":
         messagebox.showinfo("Pedido confirmado", "Pedido confirmado!")
-
-        print(f"Tamanho: {tamanho}")
-        print(f"Quantidade: {quantidade}")
-        print(f"Ingredientes extras: {ingredientes_adicionais_select}")
-        print(f"Valor total: {valorTotal}")
+        
+        # Enviando dados para inserir na tabela pedidos
+        connector = mysql.connector.connect(host='127.0.0.1',user='root',password='',database=nome_db)
+        executor_comando_sql = connector.cursor()
+        executor_comando_sql.execute("INSERT INTO pedidos (data, tamanho, quantidade, valor_total) VALUES (%s, %s, %s, %s)", (datetime.datetime.now(), tamanho, quantidade, valorTotal))
+        connector.commit()
+        connector.close()
+        
     else:
         messagebox.showwarning("Pedido cancelado", "Pedido foi cancelado.")
         
 def adicionarExtrasPedido(ingrediente):    
     if ingrediente in ingredientes_adicionais_select:
         ingredientes_adicionais_select.remove(ingrediente)
-        valor =- precos_adicionais.get(ingrediente)
     else:
         ingredientes_adicionais_select.append(ingrediente)
-        valor =+ precos_adicionais.get(ingrediente)
-    return valor
 
 def apresentarValorUnitario(selecao_tamanho):
     tamanho = selecao_tamanho
@@ -124,28 +119,27 @@ def apresentarValorUnitario(selecao_tamanho):
         label_exibir_preco_unitario.config(text="Tamanho inválido!")
 
 janela = tk.Tk()
-janela.title("Exercício 3: Escolha de Tamanho de Pizza")
+janela.title("Senac Pizzaria")
 
 label_titulo = tk.Label(janela,text="Escolha o tamanho da Pizza!")
 label_titulo.grid(row=0, column=0, padx=10, pady=5)
 
-label_exibir_preco_unitario = tk.Label(janela, text="")
-label_exibir_preco_unitario.grid(row=3, column=0, pady=5)
-
-quantidade_pizzas = tk.Entry(janela)
-quantidade_pizzas.grid(row=2, column=0, padx=5, pady=5)
-
 selecao_tamanho = tk.StringVar(janela)
 menu_pizzas = tk.OptionMenu(janela, selecao_tamanho, *tamanho_pizzas, command=apresentarValorUnitario)
-menu_pizzas.grid(row=1, column=0, pady=10)
+menu_pizzas.grid(row=1, column=0, pady=5)
+
+label_exibir_preco_unitario = tk.Label(janela, text="")
+label_exibir_preco_unitario.grid(row=2, column=0, pady=2)
+
+quantidade_pizzas = tk.Entry(janela)
+quantidade_pizzas.grid(row=3, column=0, pady=5)
 
 for x in range(len(ingredientes_adicionais)):
-    
     var = tk.IntVar()
     l = tk.Checkbutton(janela, text=ingredientes_adicionais[x], variable=var, command=lambda x=ingredientes_adicionais[x]: adicionarExtrasPedido(x))
-    l.grid(padx=10, sticky=tk.W)
+    l.grid(padx=10, pady=2, sticky=tk.W)
 
 botao_pedido = tk.Button(janela, text="Pedir", command=valorTotal)
-botao_pedido.grid(row=8, column=0)
+botao_pedido.grid(row=8, column=0, pady=10)
 
 janela.mainloop()
