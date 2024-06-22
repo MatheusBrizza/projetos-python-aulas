@@ -143,3 +143,4 @@ botao_pedido = tk.Button(janela, text="Pedir", command=valorTotal)
 botao_pedido.grid(row=8, column=0, pady=10)
 
 janela.mainloop()
+
