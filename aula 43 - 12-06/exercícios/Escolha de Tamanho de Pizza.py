@@ -62,7 +62,7 @@ connector = mysql.connector.connect(
     
 # verificando se já existe a tabela pedidos
 executor_comando_sql = connector.cursor() # também é necessário reiniciar a variável pois também senão dá o erro ReferenceError: weakly-referenced object no longer exists já que a variável anterior se referia apenas ao uso para procurar o banco de dados 
-executor_comando_sql.execute(f'SELECT COUNT(*) FROM information_schema.TABLES WHERE TABLE_NAME = "{tb_pedidos}";')
+executor_comando_sql.execute(f"SELECT EXISTS (SELECT * FROM information_schema.tables WHERE table_schema = '{nome_db}'  AND table_name = '{tb_pedidos}');")
 resultado_tb = executor_comando_sql.fetchone()[0]
 connector.close()
 
@@ -85,7 +85,7 @@ connector = mysql.connector.connect(
     
 # verificando se já existe a tabela clientes
 executor_comando_sql = connector.cursor() # também é necessário reiniciar a variável pois também senão dá o erro ReferenceError: weakly-referenced object no longer exists já que a variável anterior se referia apenas ao uso para procurar o banco de dados 
-executor_comando_sql.execute(f'SELECT COUNT(*) FROM information_schema.TABLES WHERE TABLE_NAME = "{tb_clientes}";')
+executor_comando_sql.execute(f"SELECT EXISTS (SELECT * FROM information_schema.tables WHERE table_schema = '{nome_db}'  AND table_name = '{tb_clientes}');")
 resultado_tb = executor_comando_sql.fetchone()[0]
 connector.close()
 
