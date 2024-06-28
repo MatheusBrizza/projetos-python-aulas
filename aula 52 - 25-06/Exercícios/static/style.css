@@ -1,6 +1,6 @@
-html, body {
-    margin: 0;
-    padding: 0; 
+:root {
+    --cor-titulo: #fdff73;
+    --cor-fundo: rgba(255, 255, 255, 0.2);
 }
 
 .flex-container {
@@ -9,4 +9,40 @@ html, body {
     display: flex;
     flex-direction: column;
     justify-content: center;
+    background-color: var(--cor-fundo);
+}
+
+.flex-container>h2 {
+    margin-bottom: 40px;
+    color: var(--cor-titulo);
+    font-family: var(--font-titulo);
+    font-size: 1.8rem;
+}
+
+.inputs {
+    width: 350px;
+    padding: .9rem 1.25rem;
+    margin-bottom: 20px;
+    border: 1px solid rgba(0, 0, 0, 0.15);
+    background-color: rgba(0, 0, 0, 0.4);
+    background-clip: padding-box;
+    font-size: 1.15rem;
+    color: white;
+    font-family: var(--font-texto);
+}
+
+input[type="text"],
+input[type="email"] {
+  height: 20px;
+}
+
+button[type="submit"] {
+  width: 9rem;
+  padding: 1rem 2.1rem;
+  border: none;
+  background-color: rgba(0, 0, 0, 0.3);
+  font-size: 1.3rem;
+  color: white;
+  font-family: var(--font-texto);
+  transition: all 0.3s ease;
 }
