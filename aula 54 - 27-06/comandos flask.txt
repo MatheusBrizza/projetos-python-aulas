@@ -1,0 +1,10 @@
+pip install virtualenv -> comando para instalar a dependência de virtualenv
+python -m venv .venv -> comando para iniciar o venv (para confirmar que está funcionando olhar no canto inferior direito se está na versão numero_versão('.venv': venv)
+.\.venv\Scprits\activate -> comando para ativar o venv
+pip list -> lista as dependências do venv (serve para confirmar se está realmente usando o venv, estará se tiver APENAS a dependência pip, senão feche o vscode e abra a pasta novamente)
+pip install flask -> instala a dependência flask
+pip install Flask-WTF -> instala a dependência flask-wtf (sim é necessário as duas)
+pip install Flask-WTF[email] -> instala a dependência flask-wtf de validar emails (sim tmb precisa desse)
+pip install Flask-FlaskMessages -> instala a dependência de flask de mensagens NÃO ESTÁ FUNCIONANDO ENTÃO TUDO BEM FALHAR
+pip install mysql-connector -> instala a dependência de conexão com mysql
+flask --app nome_do_arquivo.py run --debug -> roda o programa em modo debug
