@@ -2,6 +2,7 @@ import mysql.connector
 
 nome_db = "senac_pizzaria"
 tb_contatos = "contatos"
+
 def conectarBD():
     connector = mysql.connector.connect(
         host='127.0.0.1',

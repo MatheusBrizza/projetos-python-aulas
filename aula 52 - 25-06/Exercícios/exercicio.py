@@ -1,4 +1,4 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, redirect
 from flask_wtf import FlaskForm
 from wtforms import StringField, validators
 from config_bd import conectarBD
@@ -41,9 +41,32 @@ def contato():
             print("Salvo com sucesso!")
         except connector.connector.Error as e:
             print(f"Falha ao salvar dados! {e}")
-            
-    
-    return render_template("contato.html")
+            mensagem_erro = "Ocorreu um erro ao processar o seu contato. Tente novamente mais tarde."
+            return render_template('erro.html', mensagem_erro=mensagem_erro), 500
+        finally:
+            if connector is not None:
+                connector.close()
+        
+        return redirect('/sucesso')
+    else:
+        return render_template("contato.html", form=form)
+
+@app.route('/sucesso')
+def sucesso():
+    return render_template("sucesso.html")
+
+@app.errorhandler(Exception)
+def erro_geral(e):
+    mensagem_erro = str(e)
+    return render_template('erro.html', mensagem_erro=mensagem_erro), 500
+
+@app.route('/contatos')
+def contatos():
+    connector = conectarBD()
+    executor_sql = connector.cursor()
+    executor_sql.execute('SELECT * FROM contatos')
+    contatos = executor_sql.fetchall()
+    return render_template("contatos.html", contatos=contatos)
 
 if __name__ == '__main__':
     app.run

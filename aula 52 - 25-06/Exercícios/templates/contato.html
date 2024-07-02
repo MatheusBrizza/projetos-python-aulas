@@ -12,9 +12,16 @@
 <body>
   <form class="flex-container" method="POST">
     <h2>Entre em contato</h2>
-    <input type="text" class="inputs" placeholder="Nome" required />
-    <input type="email" class="inputs" placeholder="Email" required />
-    <textarea name="message" class="inputs" id="mensagem" rows="5" placeholder="Menssagem" required></textarea>
+    {{ form.csrf_token() }}
+    <input type="text" class="inputs" placeholder="Nome" />
+    {{ form.nome }}
+    {% if form.nome.errors %}
+        <span style="color: red;">{{ form.nome.errors[0] }}</span>
+    {% endif %}
+    <input type="email" class="inputs" placeholder="Email" />
+    {{ form.email }}
+    <textarea name="message" class="inputs" id="mensagem" rows="5" placeholder="Menssagem" ></textarea>
+    {{ form.mensagem}}
     <button type="submit">Submit</button>
   </form>
 </body>

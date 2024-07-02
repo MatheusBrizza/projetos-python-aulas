@@ -46,3 +46,7 @@ button[type="submit"] {
   font-family: var(--font-texto);
   transition: all 0.3s ease;
 }
+
+.tabela-contatos{
+  background-color: azure;
+}
