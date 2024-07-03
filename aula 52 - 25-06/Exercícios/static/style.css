@@ -50,3 +50,19 @@ button[type="submit"] {
 .tabela-contatos{
   background-color: azure;
 }
+
+#nome, #email, #mensagem {
+  width: 350px;
+  padding: .9rem 1.25rem;
+  margin-bottom: 20px;
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  background-color: rgba(0, 0, 0, 0.4);
+  background-clip: padding-box;
+  font-size: 1.15rem;
+  color: white;
+  font-family: var(--font-texto);
+}
+
+#nome::placeholder, #email::placeholder, #mensagem::placeholder {
+  color: azure;
+}

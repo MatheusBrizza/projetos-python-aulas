@@ -1,21 +1,15 @@
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <link rel="stylesheet" href="../static/reset.css">
-    <link rel="stylesheet" href="../static/style.css">
-</head>
-
-<body>
+{% extends "navbar.html" %}
+{% block titulo %}
+Lista contatos
+{% endblock %}
+{% block conteudo %}
     <h1 class="titulo-contatos">Contatos</h1>
     <section class ="tabela-contatos">
         <table>
             <thead>
                 <tr>
                     <th>Nome</th>
+                    <th>Email</th>
                     <th>Mensagem</th>
                     <th>Ação</th>
                 </tr>
@@ -38,6 +32,4 @@
             </tbody>
         </table>
     </section>
-</body>
-
-</html>
+{% endblock %}

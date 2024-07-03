@@ -1,4 +1,4 @@
-from flask import Flask, render_template, redirect
+from flask import Flask, render_template, redirect, url_for, session
 from flask_wtf import FlaskForm
 from wtforms import StringField, validators
 from config_bd import conectarBD
@@ -8,9 +8,16 @@ app = Flask(__name__)
 app.config['SECRET_KEY'] = "segredo"
 
 class FormularioContato(FlaskForm):
-    nome = StringField('Nome:', validators=[validators.DataRequired()])
-    email = StringField('Email:', validators=[validators.DataRequired(), validators.Email()])
-    mensagem = StringField('Mensagem:', validators=[validators.DataRequired()])
+    nome = StringField('Nome:', validators=[validators.DataRequired()], render_kw={"placeholder":"Nome"})
+    email = StringField('Email:', validators=[validators.DataRequired(), validators.Email()], render_kw={"placeholder":"Email"})
+    mensagem = StringField('Mensagem:', validators=[validators.DataRequired()], render_kw={"placeholder":"Mensagem"})
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    session.clear()
+    session.pop('usuario_id', None)
+    #continuar
+    
 
 @app.route('/')
 def index():
@@ -46,7 +53,7 @@ def contato():
         finally:
             if connector is not None:
                 connector.close()
-        
+
         return redirect('/sucesso')
     else:
         return render_template("contato.html", form=form)

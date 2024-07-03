@@ -2,6 +2,7 @@ import mysql.connector
 
 nome_db = "senac_pizzaria"
 tb_contatos = "contatos"
+tb_usuarios = "usuarios"
 
 def conectarBD():
     connector = mysql.connector.connect(
@@ -43,8 +44,8 @@ def conectarBD():
         password='',
         database= nome_db  
     )
-        
-    # verificando se já existe a tabela pedidos
+
+    # verificando se já existe a tabela contatos
     executor_comando_sql = connector.cursor() # também é necessário reiniciar a variável pois também senão dá o erro ReferenceError: weakly-referenced object no longer exists já que a variável anterior se referia apenas ao uso para procurar o banco de dados 
     executor_comando_sql.execute(f"SELECT EXISTS (SELECT * FROM information_schema.tables WHERE table_schema = '{nome_db}'  AND table_name = '{tb_contatos}');")
     resultado_tb = executor_comando_sql.fetchone()[0]
@@ -57,6 +58,37 @@ def conectarBD():
         connector = mysql.connector.connect(host='127.0.0.1',user='root',password='',database= nome_db)
         executor_comando_sql = connector.cursor()
         executor_comando_sql.execute('CREATE TABLE contatos (id INT AUTO_INCREMENT PRIMARY KEY,nome VARCHAR(255) NOT NULL,email VARCHAR(255) NOT NULL,mensagem TEXT NOT NULL);')
+        connector.commit()
+        connector.close()
+    
+    connector = mysql.connector.connect(
+        host='127.0.0.1',
+        user='root',
+        password='',
+        database= nome_db  
+    )
+        
+    # verificando se já existe a tabela usuários
+    executor_comando_sql = connector.cursor() # também é necessário reiniciar a variável pois também senão dá o erro ReferenceError: weakly-referenced object no longer exists já que a variável anterior se referia apenas ao uso para procurar o banco de dados 
+    executor_comando_sql.execute(f"SELECT EXISTS (SELECT * FROM information_schema.tables WHERE table_schema = '{nome_db}'  AND table_name = '{tb_usuarios}');")
+    resultado_tb = executor_comando_sql.fetchone()[0]
+    connector.close()
+
+    if resultado_tb > 0:
+        print(f"tabela {tb_usuarios} já existe!")
+    else:
+        print("criando tabela usuários")
+        connector = mysql.connector.connect(host='127.0.0.1',user='root',password='',database= nome_db)
+        executor_comando_sql = connector.cursor()
+        executor_comando_sql.execute('CREATE TABLE usuarios (id INT AUTO_INCREMENT PRIMARY KEY, nome VARCHAR(255), email VARCHAR(255),senha VARCHAR(255));')
+        connector.commit()
+        
+        nome="ADMIN"
+        email="a@a.com"
+        senha="admin123"
+        sql = "INSERT INTO usuarios (nome, email, senha) VALUES (%s, %s, %s)"
+        valores = (nome, email, senha)
+        executor_comando_sql.execute(sql, valores)
         connector.commit()
         connector.close()
     try:
