@@ -1,34 +1,70 @@
 :root {
-    --cor-titulo: #fdff73;
-    --cor-fundo: rgba(255, 255, 255, 0.2);
+  --cor-titulo: #fdff73;
+  --cor-fundo: rgba(255, 255, 255, 0.4);
+}
+
+nav {
+  display: flex;
+  justify-content: space-around;
+  background-color: rgba(0, 0, 139, 0.708);
+  padding: 10px 0px;
+}
+
+ul {
+  margin: 0px;
+  display: flex;
+}
+a {
+  color: azure;
+}
+
+li {
+  min-height: 48px;
+  display: flex;
+  align-items: center;
+  margin-left: 60px;
+  cursor: pointer;
+  user-select: none;
+  font-weight: bolder;
+  color: azure;
+}
+
+.container {
+  padding: 40px;
+  background-color: var(--cor-fundo);
+}
+
+.container>h1 {
+  text-align: center;
 }
 
 .flex-container {
-    width: 400px;
-    padding: 40px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    background-color: var(--cor-fundo);
+  text-align: center;
+  width: 400px;
+  padding: 40px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  background-color: var(--cor-fundo);
 }
 
 .flex-container>h2 {
-    margin-bottom: 40px;
-    color: var(--cor-titulo);
-    font-family: var(--font-titulo);
-    font-size: 1.8rem;
+  margin-bottom: 40px;
+  color: var(--cor-titulo);
+  font-family: var(--font-titulo);
+  font-size: 1.8rem;
 }
 
 .inputs {
-    width: 350px;
-    padding: .9rem 1.25rem;
-    margin-bottom: 20px;
-    border: 1px solid rgba(0, 0, 0, 0.15);
-    background-color: rgba(0, 0, 0, 0.4);
-    background-clip: padding-box;
-    font-size: 1.15rem;
-    color: white;
-    font-family: var(--font-texto);
+  width: 350px;
+  padding: .9rem 1.25rem;
+  margin-bottom: 20px;
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  background-color: rgba(0, 0, 0, 0.4);
+  background-clip: padding-box;
+  font-size: 1.15rem;
+  color: white;
+  font-family: var(--font-texto);
 }
 
 input[type="text"],
@@ -47,11 +83,13 @@ button[type="submit"] {
   transition: all 0.3s ease;
 }
 
-.tabela-contatos{
+.tabela-contatos {
   background-color: azure;
 }
 
-#nome, #email, #mensagem {
+#nome,
+#email,
+#mensagem {
   width: 350px;
   padding: .9rem 1.25rem;
   margin-bottom: 20px;
@@ -63,6 +101,8 @@ button[type="submit"] {
   font-family: var(--font-texto);
 }
 
-#nome::placeholder, #email::placeholder, #mensagem::placeholder {
+#nome::placeholder,
+#email::placeholder,
+#mensagem::placeholder {
   color: azure;
 }

@@ -3,15 +3,21 @@
 Contato
 {% endblock %}
 {% block conteudo %}
-  <form class="flex-container" method="POST">
-    <h2>Entre em contato</h2>
-    {{ form.csrf_token() }}
-    {{ form.nome }}
-    {% if form.nome.errors %}
-        <span style="color: red;">{{ form.nome.errors[0] }}</span>
-    {% endif %}
-    {{ form.email }}
-    {{ form.mensagem}}
-    <button type="submit">Submit</button>
-  </form>
+<form class="flex-container" method="POST">
+  <h2>Entre em contato</h2>
+  {{ form.csrf_token() }}
+  {{ form.nome }}
+  {% if form.nome.errors %}
+  <span style="color: red;">{{ form.nome.errors[0] }}</span>
+  {% endif %}
+  {{ form.email }}
+  {% if form.email.errors %}
+  <span style="color: red;">{{ form.email.errors[0] }}</span>
+  {% endif %}
+  {{ form.mensagem}}
+  {% if form.mensagem.errors %}
+  <span style="color: red;">{{ form.mensagem.errors[0] }}</span>
+  {% endif %}
+  <button type="submit">Submit</button>
+</form>
 {% endblock %}

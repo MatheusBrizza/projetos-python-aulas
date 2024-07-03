@@ -5,4 +5,5 @@ html, body {
 body {
     background-image: url(./Pizza-3007395.jpg);
     background-size: cover;
+    height: 100vh;
 }
