@@ -1,32 +1,27 @@
 {% extends "navbar.html" %}
 {% block titulo %}
-Lista contatos
+Lista usuarios
 {% endblock %}
 {% block conteudo %}
 <section class="container">
-    <h1 class="titulo-contatos">Contatos</h1>
+    <h1 class="titulo-contatos">Usuários</h1>
     <section class ="tabela-contatos">
         <table>
             <thead class="tabela-cabecalho">
                 <tr>
                     <th>Nome</th>
                     <th>Email</th>
-                    <th>Mensagem</th>
                     <th>Ação</th>
                 </tr>
             </thead>
             <tbody>
-                {% for contato in contatos %}
+                {% for usuario in usuarios %}
                 <tr>
-                    <td>{{ contato[1] }}</td>
-                    <td>{{ contato[2] }}</td>
-                    <td>{{ contato[3] }}</td>
+                    <td>{{ usuario[1] }}</td>
+                    <td>{{ usuario[2] }}</td>
                     <td>
-                        {% if contato[10] == 0 %}
-                        <button>Lido</button>
-                        {% else %}
-                        <button>Não lido</button>
-                        {% endif %}
+                        <a href="/editarusuario/{{ usuario[0]}}" class="editar">Editar</a>
+                        <a href="/excluir_usuario/{{ usuario[0]}}" class="excluir">Excluir</a>
                     </td>
                 </tr>
                 {% endfor %}
@@ -34,4 +29,5 @@ Lista contatos
         </table>
     </section>
 </section>
+
 {% endblock %}

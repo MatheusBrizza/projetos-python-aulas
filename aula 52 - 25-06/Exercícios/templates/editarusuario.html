@@ -1,0 +1,27 @@
+{% extends 'template.html' %}
+{% block titulo %}
+Editar Usuario
+{% endblock %}
+{% block conteudo %}
+<body>
+    
+    <h1>Editando usuário</h1>
+
+    <form action="/editarusuario/{{id}}" method="POST">
+        <input type="text" name="nome" placeholder="Nome" value="{{dados_usuario.nome}}">
+        <input type="email" name="email" placeholder="Email" value="{{dados_usuario.email}}">
+        <input type="password" name="senha" placeholder="Senha">
+        <button type="submit">Atualizar</button>
+
+        <script>
+            //Limpa os campos do formulário ao entrar na tela
+            $(document).ready(function () {
+                $('input[name="nome"]').val('');
+                $('input[name="email"]').val('');
+                $('input[name="senha"]').val('');
+            });
+        </script>
+    </form>
+</body>
+
+{% endblock %}

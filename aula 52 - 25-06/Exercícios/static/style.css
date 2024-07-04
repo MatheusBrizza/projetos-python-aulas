@@ -14,6 +14,7 @@ ul {
   margin: 0px;
   display: flex;
 }
+
 a {
   color: azure;
 }
@@ -84,7 +85,26 @@ button[type="submit"] {
 }
 
 .tabela-contatos {
+  border-collapse: collapse;
+  border-top: 1px solid #ddd;
+  border-bottom: 1px solid #ddd;
   background-color: azure;
+  font-size: large;
+}
+
+.tabela-cabecalho {
+  background-color: navy;
+  color: azure;
+  border-bottom: 2px;
+}
+
+table {
+  width: 100%;
+}
+
+th, td {
+  padding: 10px;
+  border-right: 1px solid #ddd;
 }
 
 #nome,

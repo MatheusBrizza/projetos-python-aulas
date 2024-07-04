@@ -1,11 +1,36 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login</title>
+    <link rel="stylesheet" href="../static/reset.css">
+    <link rel="stylesheet" href="../static/style.css">
 </head>
+
 <body>
-    
+    <section class="flex-container">
+
+        <h1>Sistema Senac Pizzaria</h1>
+
+        <form action="/validarlogin" method="POST">
+            <input type="text" name="nome" placeholder="Nome usuário">
+            <input type="password" name="senha" placeholder="Senha">
+            <button type="submit">Entrar</button>
+        </form>
+        {% set flashed_messages = get_flashed_messages() %}
+        {% if mensagens%}
+        <div class="msg-alertas">
+            {%for msg in mensagens%}
+            <span class="ms erro"><i class="icon icon-hand-paper-o"></i>{{(msg)}}</span>
+
+        </div>
+        {%endfor%}
+
+        {%endif%}
+    </section>
+
 </body>
+
 </html>

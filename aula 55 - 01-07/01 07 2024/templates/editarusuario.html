@@ -12,60 +12,62 @@ Editar Usuário
 
 
 <body style="text-align: center;  font-family: Segoe UI;">
-       
-    
-    
+
+
+
     <div>
-      
-                <img class="imgpython" src="{{url_for('static', filename='giphy.gif')}}">
-                <h1 style="text-align: center; font-size: 25px; font-family: Segoe UI;">
+
+        <img class="imgpython" src="{{url_for('static', filename='giphy.gif')}}">
+        <h1 style="text-align: center; font-size: 25px; font-family: Segoe UI;">
             Por favor, edite os dados do usuário
-       
-                <form method="POST" action="/editarusuario/{{id}}">
-                       <div>
-                <input style="margin: 5px" class="inputlogin" type="text" name="nome" placeholder="Nome" value="{{dados_usuario.nome}}">
-            </div>
-                       <div>
-                <input style="margin: 5px"  class="inputlogin"type="email" name="email" placeholder="E-mail" value="{{dados_usuario.email}}">
-            </div>
-                       <div>
-                <input style="margin: 5px" class="inputlogin" type="password" name="senha" placeholder="Senha">
-            </div>
-        </div>
-        {% set mensagens =  get_flashed_messages()%}
-        {% if mensagens%}
-           <div class=class="msg-alertas">
-            {%for msg in mensagens%}
-            <span class="ms erro"><i class="icon icon-hand-paper-o"></i>{{(msg)}}</span>
-           
-            </div>
-            {%endfor%}
-   
-        {%endif%}
-                    <br>
-        <button class="botaologin" type="submit">Atualizar</button>
-    
 
-    
-    
+            <form method="POST" action="/editarusuario/{{id}}">
+                <div>
+                    <input style="margin: 5px" class="inputlogin" type="text" name="nome" placeholder="Nome"
+                        value="{{dados_usuario.nome}}">
+                </div>
+                <div>
+                    <input style="margin: 5px" class="inputlogin" type="email" name="email" placeholder="E-mail"
+                        value="{{dados_usuario.email}}">
+                </div>
+                <div>
+                    <input style="margin: 5px" class="inputlogin" type="password" name="senha" placeholder="Senha">
+                </div>
+    </div>
+    {% set mensagens = get_flashed_messages()%}
+    {% if mensagens%}
+    <div class=class="msg-alertas">
+        {%for msg in mensagens%}
+        <span class="ms erro"><i class="icon icon-hand-paper-o"></i>{{(msg)}}</span>
+
+    </div>
+    {%endfor%}
+
+    {%endif%}
+    <br>
+    <button class="botaologin" type="submit">Atualizar</button>
+
+
+
+
     <script>
-      //Limpa os campos do formulário ao entrar na tela
-      $(document).ready(function() {
-        $('input[name="nome"]').val('');
-        $('input[name="email"]').val('');
-        $('input[name="senha"]').val('');
-      });
+        //Limpa os campos do formulário ao entrar na tela
+        $(document).ready(function () {
+            $('input[name="nome"]').val('');
+            $('input[name="email"]').val('');
+            $('input[name="senha"]').val('');
+        });
     </script>
-    
 
-    
-    
+
+
+
     </form>
     <br>
-   
-<!--Div para exibir mensagens de erro, inicialmente oculta -->
 
-</div>
+    <!--Div para exibir mensagens de erro, inicialmente oculta -->
+
+    </div>
 
 
 </body>
