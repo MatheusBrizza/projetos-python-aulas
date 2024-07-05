@@ -21,13 +21,14 @@ Lista usuarios
                     <td>{{ usuario[2] }}</td>
                     <td>
                         <a href="/editarusuario/{{ usuario[0]}}" class="editar">Editar</a>
-                        <a href="/excluir_usuario/{{ usuario[0]}}" class="excluir">Excluir</a>
+                        <a href="/excluirusuario/{{ usuario[0]}}" class="excluir">Excluir</a>
                     </td>
                 </tr>
                 {% endfor %}
             </tbody>
         </table>
     </section>
+    <a href="{{url_for('novousuario')}}">Cadastrar usuário</a>
 </section>
 
 {% endblock %}

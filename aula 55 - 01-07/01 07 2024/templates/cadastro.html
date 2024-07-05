@@ -19,60 +19,60 @@ Formulário de Cadastro
 
 
 <body style="text-align: center;  font-family: Segoe UI;">
-       
-    
-    
+
+
+
     <div>
-      
-                <img class="imgpython" src="{{url_for('static', filename='giphy.gif')}}">
-                <h1 style="text-align: center; font-size: 25px; font-family: Segoe UI;">
+
+        <img class="imgpython" src="{{url_for('static', filename='giphy.gif')}}">
+        <h1 style="text-align: center; font-size: 25px; font-family: Segoe UI;">
             Por favor, crie a sua conta
-       
-                <form method="POST" action="/add_cadastro">
-                       <div>
-                <input style="margin: 5px" class="inputlogin" type="text" name="nome" placeholder="Nome">
-            </div>
-                        <div>
-                <input style="margin: 5px"  class="inputlogin"type="email" name="email" placeholder="E-mail">
-            </div>
-                        <div>
-                <input style="margin: 5px" class="inputlogin" type="password" name="senha" placeholder="Senha">
-            </div>
-            {% set mensagens =  get_flashed_messages()%}
-            {% if mensagens%}
-               <div class=class="msg-alertas">
-                {%for msg in mensagens%}
-                <span class="ms erro"><i class="icon icon-hand-paper-o"></i>{{(msg)}}</span>
-               
+
+            <form method="POST" action="/add_cadastro">
+                <div>
+                    <input style="margin: 5px" class="inputlogin" type="text" name="nome" placeholder="Nome">
+                </div>
+                <div>
+                    <input style="margin: 5px" class="inputlogin" type="email" name="email" placeholder="E-mail">
+                </div>
+                <div>
+                    <input style="margin: 5px" class="inputlogin" type="password" name="senha" placeholder="Senha">
+                </div>
+                {% set mensagens = get_flashed_messages()%}
+                {% if mensagens%}
+                <div class=class="msg-alertas">
+                    {%for msg in mensagens%}
+                    <span class="ms erro"><i class="icon icon-hand-paper-o"></i>{{(msg)}}</span>
+
                 </div>
                 {%endfor%}
-       
-            {%endif%}
-                        <br>
-            <button class="botaologin" type="submit">Cadastrar</button>
-        
-   
-        
-        
-        <script>
-          //Limpa os campos do formulário ao entrar na tela
-          $(document).ready(function() {
-            $('input[name="nome"]').val('');
-            $('input[name="email"]').val('');
-            $('input[name="senha"]').val('');
-          });
-        </script>
-        
-   
-        
-        
-        </form>
-        <br>
-       
-    <!--Div para exibir mensagens de erro, inicialmente oculta -->
+
+                {%endif%}
+                <br>
+                <button class="botaologin" type="submit">Cadastrar</button>
+
+
+
+
+                <script>
+                    //Limpa os campos do formulário ao entrar na tela
+                    $(document).ready(function () {
+                        $('input[name="nome"]').val('');
+                        $('input[name="email"]').val('');
+                        $('input[name="senha"]').val('');
+                    });
+                </script>
+
+
+
+
+            </form>
+            <br>
+
+            <!--Div para exibir mensagens de erro, inicialmente oculta -->
 
     </div>
 
-   
+
 </body>
 {% endblock %}

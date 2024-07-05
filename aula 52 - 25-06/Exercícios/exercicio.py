@@ -1,6 +1,6 @@
 from flask import Flask, render_template, redirect, url_for, session, request, flash
 from flask_wtf import FlaskForm
-from wtforms import StringField, validators
+from wtforms import StringField, validators, PasswordField
 from config_bd import conectarBD
 
 
@@ -11,6 +11,12 @@ class FormularioContato(FlaskForm):
     nome = StringField('Nome:', validators=[validators.DataRequired()], render_kw={"placeholder":"Nome"})
     email = StringField('Email:', validators=[validators.DataRequired(), validators.Email()], render_kw={"placeholder":"Email"})
     mensagem = StringField('Mensagem:', validators=[validators.DataRequired()], render_kw={"placeholder":"Mensagem"})
+    
+class FormularioUsuario(FlaskForm):
+    nome = StringField('Nome:', validators=[validators.DataRequired()], render_kw={"placeholder":"Nome"})
+    email = StringField('Email:', validators=[validators.DataRequired(), validators.Email()], render_kw={"placeholder":"Email"})
+    senha = PasswordField('Mensagem:', validators=[validators.DataRequired()], render_kw={"placeholder":"Senha"})
+
 
 @app.route('/', methods=['GET', 'POST'])
 def pagina_login():
@@ -76,6 +82,55 @@ def contato():
     else:
         return render_template("contato.html", form=form)
 
+
+@app.route('/novousuario', methods=['GET', 'POST'])
+def novousuario():
+    if not session.get('usuario_id'):
+        return redirect(url_for('pagina_login'))
+
+    form = FormularioUsuario()
+    
+    if form.validate_on_submit():
+        nome = form.nome.data
+        email = form.email.data
+        senha = form.senha.data
+    
+        connector = conectarBD()
+        
+        executor_sql = connector.cursor()
+        executor_sql.execute("""SELECT COUNT(*) FROM usuarios WHERE email = %s;""", (email,))
+        resultado_usuario = executor_sql.fetchone()[0]
+        executor_sql.close()
+        connector.close()
+
+        # Se o número de resultados for maior que zero, significa que o banco de dados existe
+        if resultado_usuario > 0:
+            flash('Email já cadastrado')
+            return render_template('novousuario.html')
+        else:
+            try:
+                connector = conectarBD()
+                executor_sql = connector.cursor()
+                comando_sql = 'INSERT INTO usuarios (nome, email, senha) VALUES (%s, %s, %s)'
+                valores = (nome, email, senha)
+                executor_sql.execute(comando_sql, valores)
+                connector.commit()
+                executor_sql.close()
+                connector.close()
+                
+                return redirect(url_for('usuarios'))
+            except connector.connector.Error as e:
+                print(f"Falha ao salvar dados! {e}")
+                mensagem_erro = "Ocorreu um erro ao processar o seu contato. Tente novamente mais tarde."
+                return render_template('erro.html', mensagem_erro = mensagem_erro), 500
+            finally:
+                if connector is not None:
+                    connector.close()
+    else:
+        return render_template("novousuario.html", form=form)
+
+
+
 @app.route('/sucesso')
 def sucesso():
     return render_template("sucesso.html")
@@ -109,6 +164,7 @@ def editarusuario(id):
         return render_template('editarusuario/<id>', error='ID inválido')
     
     connector = conectarBD()
+    
     executor_sql = connector.cursor()
     executor_sql.execute("""SELECT id, nome, email FROM usuarios WHERE id = %s;""", (id,))
     dados_usuario = executor_sql.fetchone()
@@ -131,19 +187,35 @@ def editarusuario(id):
             return render_template('editarusuario/<id>', dados_usuario=dados_usuario)
         
         connector = conectarBD()
+        
         executor_sql = connector.cursor()
         comando_sql = 'UPDATE usuarios SET nome = %s, email = %s, senha = %s WHERE id = %s;'
         valores = (nome, email, senha, id)
-        executor_sql(comando_sql, valores)
+        executor_sql.execute(comando_sql, valores)
         connector.commit()
         executor_sql.close()
         connector.close()
         
-        return redirect(url_for('index'))
+        return redirect(url_for('usuarios'))
     
     return render_template('editarusuario.html', id=id, dados_usuario=dados_usuario)
         
-       
+@app.route('/excluirusuario/<id>', methods= ['GET', 'POST'])
+def excluirusuario(id):
+    if not id.isDigit():
+        return render_template('erro.html', error='ID inválido')
+    
+    try:        
+        connector = conectarBD()
+        
+        executor_sql = connector.cursor()
+        executor_sql.execute("""DELETE FROM usuarios WHERE id = %s;""", (id,))
+        executor_sql.close()
+        connector.close()
+
+        return redirect(url_for('usuarios'))
+    except connector.connector.Error as e:
+        return render_template('erro.html', error=str(e))
 
 
 if __name__ == '__main__':
