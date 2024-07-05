@@ -10,25 +10,28 @@
 </head>
 
 <body>
-    <section class="flex-container">
+    <section>
+        <div class="container-login">
+            <h1>Sistema Senac Pizzaria</h1>
 
-        <h1>Sistema Senac Pizzaria</h1>
+            <form action="/validarlogin" method="POST">
+                <div class="login">
+                    <input class="inputs" type="text" name="nome" placeholder="Nome usuário">
+                    <input class="inputs" type="password" name="senha" placeholder="Senha">
+                    <button type="submit">Entrar</button>
+                </div>
+            </form>
+            {% set flashed_messages = get_flashed_messages() %}
+            {% if mensagens%}
+            <div class="msg-alertas">
+                {%for msg in mensagens%}
+                <span class="ms erro"><i class="icon icon-hand-paper-o"></i>{{(msg)}}</span>
 
-        <form action="/validarlogin" method="POST">
-            <input type="text" name="nome" placeholder="Nome usuário">
-            <input type="password" name="senha" placeholder="Senha">
-            <button type="submit">Entrar</button>
-        </form>
-        {% set flashed_messages = get_flashed_messages() %}
-        {% if mensagens%}
-        <div class="msg-alertas">
-            {%for msg in mensagens%}
-            <span class="ms erro"><i class="icon icon-hand-paper-o"></i>{{(msg)}}</span>
+            </div>
+            {%endfor%}
 
+            {%endif%}
         </div>
-        {%endfor%}
-
-        {%endif%}
     </section>
 
 </body>

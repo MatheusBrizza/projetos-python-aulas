@@ -15,7 +15,7 @@ class FormularioContato(FlaskForm):
 class FormularioUsuario(FlaskForm):
     nome = StringField('Nome:', validators=[validators.DataRequired()], render_kw={"placeholder":"Nome"})
     email = StringField('Email:', validators=[validators.DataRequired(), validators.Email()], render_kw={"placeholder":"Email"})
-    senha = PasswordField('Mensagem:', validators=[validators.DataRequired()], render_kw={"placeholder":"Senha"})
+    senha = PasswordField('Senha:', validators=[validators.DataRequired()], render_kw={"placeholder":"Senha"})
 
 
 @app.route('/', methods=['GET', 'POST'])
@@ -51,6 +51,7 @@ def index():
 def sobre():
     return render_template("sobre.html")
 
+# Telas contatos
 @app.route('/contato', methods=['GET', 'POST'])
 def contato():
     form = FormularioContato()
@@ -83,6 +84,35 @@ def contato():
         return render_template("contato.html", form=form)
 
 
+@app.route('/sucesso')
+def sucesso():
+    return render_template("sucesso.html")
+
+@app.errorhandler(Exception)
+def erro_geral(e):
+    mensagem_erro = str(e)
+    return render_template('erro.html', mensagem_erro=mensagem_erro), 500
+
+@app.route('/contatos')
+def contatos():
+    connector = conectarBD()
+    executor_sql = connector.cursor()
+    executor_sql.execute('SELECT * FROM contatos')
+    contatos = executor_sql.fetchall()
+    return render_template("contatos.html", contatos=contatos)
+
+# Telas usuários
+@app.route('/usuarios')
+def usuarios():
+    if not session.get('usuario_id'):
+        return redirect(url_for('pagina_login'))
+    connector = conectarBD()
+    executor_sql = connector.cursor()
+    executor_sql.execute('SELECT * FROM usuarios')
+    usuarios = executor_sql.fetchall()
+    return render_template("usuarios.html", usuarios=usuarios)
+
+
 @app.route('/novousuario', methods=['GET', 'POST'])
 def novousuario():
     if not session.get('usuario_id'):
@@ -103,7 +133,6 @@ def novousuario():
         executor_sql.close()
         connector.close()
 
-        # Se o número de resultados for maior que zero, significa que o banco de dados existe
         if resultado_usuario > 0:
             flash('Email já cadastrado')
             return render_template('novousuario.html')
@@ -128,35 +157,6 @@ def novousuario():
                     connector.close()
     else:
         return render_template("novousuario.html", form=form)
-
-
-
-@app.route('/sucesso')
-def sucesso():
-    return render_template("sucesso.html")
-
-@app.errorhandler(Exception)
-def erro_geral(e):
-    mensagem_erro = str(e)
-    return render_template('erro.html', mensagem_erro=mensagem_erro), 500
-
-@app.route('/contatos')
-def contatos():
-    connector = conectarBD()
-    executor_sql = connector.cursor()
-    executor_sql.execute('SELECT * FROM contatos')
-    contatos = executor_sql.fetchall()
-    return render_template("contatos.html", contatos=contatos)
-
-@app.route('/usuarios')
-def usuarios():
-    if not session.get('usuario_id'):
-        return redirect(url_for('pagina_login'))
-    connector = conectarBD()
-    executor_sql = connector.cursor()
-    executor_sql.execute('SELECT * FROM usuarios')
-    usuarios = executor_sql.fetchall()
-    return render_template("usuarios.html", usuarios=usuarios)
 
 @app.route('/editarusuario/<id>', methods=['GET', 'POST'])
 def editarusuario(id):
@@ -202,20 +202,18 @@ def editarusuario(id):
         
 @app.route('/excluirusuario/<id>', methods= ['GET', 'POST'])
 def excluirusuario(id):
-    if not id.isDigit():
-        return render_template('erro.html', error='ID inválido')
-    
     try:        
         connector = conectarBD()
         
         executor_sql = connector.cursor()
         executor_sql.execute("""DELETE FROM usuarios WHERE id = %s;""", (id,))
+        connector.commit()
         executor_sql.close()
         connector.close()
 
         return redirect(url_for('usuarios'))
     except connector.connector.Error as e:
-        return render_template('erro.html', error=str(e))
+        return render_template('excluirusuario.html', error=str(e))
 
 
 if __name__ == '__main__':

@@ -3,24 +3,27 @@
 Editar Usuario
 {% endblock %}
 {% block conteudo %}
-    
-    <h1>Cadastrar Usuário</h1>
+<section>
+    <div class="flex-container">
+        <h2>Cadastrar Usuário</h2>
 
-    <form class="flex-container" method="POST">
-        {{ form.csrf_token() }}
-        {{form.nome}}
-        {{form.email}}
-        {{form.senha}}
+        <form method="POST">
+            {{ form.csrf_token() }}
+            {{form.nome}}
+            {{form.email}}
+            {{form.senha}}
 
-        <button type="submit">Cadastrar</button>
+            <button type="submit">Cadastrar</button>
 
-        <script>
-            $(document).ready(function () {
-                $('input[name="nome"]').val('');
-                $('input[name="email"]').val('');
-                $('input[name="senha"]').val('');
-            });
-        </script>
+            <script>
+                $(document).ready(function () {
+                    $('input[name="nome"]').val('');
+                    $('input[name="email"]').val('');
+                    $('input[name="senha"]').val('');
+                });
+            </script>
 
-    </form>
+        </form>
+    </div>
+</section>
 {% endblock %}

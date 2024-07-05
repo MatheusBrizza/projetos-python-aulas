@@ -5,7 +5,7 @@ Lista usuarios
 {% block conteudo %}
 <section class="container">
     <h1 class="titulo-contatos">Usuários</h1>
-    <section class ="tabela-contatos">
+    <section class="tabela-contatos">
         <table>
             <thead class="tabela-cabecalho">
                 <tr>
@@ -20,15 +20,17 @@ Lista usuarios
                     <td>{{ usuario[1] }}</td>
                     <td>{{ usuario[2] }}</td>
                     <td>
-                        <a href="/editarusuario/{{ usuario[0]}}" class="editar">Editar</a>
-                        <a href="/excluirusuario/{{ usuario[0]}}" class="excluir">Excluir</a>
+                        <a href="/editarusuario/{{ usuario[0]}}" class="botao">Editar</a>
+                        <a href="/excluirusuario/{{ usuario[0]}}" class="botao excluir">Excluir</a>
                     </td>
                 </tr>
                 {% endfor %}
             </tbody>
         </table>
     </section>
-    <a href="{{url_for('novousuario')}}">Cadastrar usuário</a>
+    <div class="botao-container">
+        <a href="{{url_for('novousuario')}}" class="botao">Cadastrar usuário</a>
+    </div>
 </section>
 
 {% endblock %}
