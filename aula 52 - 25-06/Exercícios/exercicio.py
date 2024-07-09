@@ -101,6 +101,22 @@ def contatos():
     contatos = executor_sql.fetchall()
     return render_template("contatos.html", contatos=contatos)
 
+@app.route('/atendercontato/<id>', methods = ['GET', 'POST'])
+def atendercontato(id):
+    
+    usuario_id = session.get('usuario_id')
+    try:
+        connector = conectarBD()
+        executor_sql = connector.cursor()
+        
+        comando_sql = 'INSERT INTO usuario_contato (usuario_id, contato_id) VALUES (%s, %s);'
+        valores = (int(usuario_id), int(id))
+        executor_sql.execute(comando_sql, valores)
+        connector.commit()
+        return redirect(url_for('contatos'))
+    except Exception as e:
+        return render_template('erro_geral', mensagem=str(e))
+    
 # Telas usuários
 @app.route('/usuarios')
 def usuarios():

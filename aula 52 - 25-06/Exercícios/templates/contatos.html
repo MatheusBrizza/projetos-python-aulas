@@ -23,9 +23,9 @@ Lista contatos
                     <td>{{ contato[3] }}</td>
                     <td>
                         {% if contato[10] == 0 %}
-                        <button class="botao">Lido</button>
+                        <a href="/atendercontato/{{ contato[0] }}" class="botao">Atender</a>
                         {% else %}
-                        <button class="botao">Não lido</button>
+                        <a href="/atendercontato/{{ contato[0] }}" class="botao">Atender</a>
                         {% endif %}
                     </td>
                 </tr>
