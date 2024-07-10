@@ -109,8 +109,33 @@ def atendercontato(id):
         connector = conectarBD()
         executor_sql = connector.cursor()
         
-        comando_sql = 'INSERT INTO usuario_contato (usuario_id, contato_id) VALUES (%s, %s);'
-        valores = (int(usuario_id), int(id))
+        sql = 'UPDATE contatos SET situacao = %s WHERE id = %s;'
+        valores = ("Em atendimento", int(id))
+        executor_sql.execute(sql, valores)
+        connector.commit()
+
+        comando_sql = 'INSERT INTO usuario_contato (usuario_id, contato_id, situacao) VALUES (%s, %s, %s);'
+        valores = (int(usuario_id), int(id), "Em atendimento")
+        executor_sql.execute(comando_sql, valores)
+        connector.commit()
+        return redirect(url_for('contatos'))
+    except Exception as e:
+        return render_template('erro_geral', mensagem=str(e))
+    
+@app.route('/finalizarcontato/<id>', methods= ['GET', 'POST'])
+def finalizarcontato(id):
+    usuario_id = session.get('usuario_id')
+    try:
+        connector = conectarBD()
+        executor_sql = connector.cursor()
+        
+        sql = 'UPDATE contatos SET situacao = %s WHERE id = %s;'
+        valores = ("Finalizado", int(id))
+        executor_sql.execute(sql, valores)
+        connector.commit()
+
+        comando_sql = 'UPDATE usuario_contato SET situacao = %s WHERE usuario_id = %s AND contato_id = %s;'
+        valores = ("Finalizado", int(usuario_id), int(id))
         executor_sql.execute(comando_sql, valores)
         connector.commit()
         return redirect(url_for('contatos'))

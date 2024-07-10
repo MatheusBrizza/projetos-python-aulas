@@ -1,10 +1,10 @@
-{% extends "navbar.html" %}
+{% extends 'navbar.html' %}
 {% block titulo %}
-Lista contatos
+Meus contatos
 {% endblock %}
 {% block conteudo %}
 <section class="container">
-    <h1 class="titulo-contatos">Contatos</h1>
+    <h1 class="titulo-contatos">Meus contatos</h1>
     <section class ="tabela-contatos">
         <table>
             <thead class="tabela-cabecalho">
@@ -22,10 +22,10 @@ Lista contatos
                     <td>{{ contato[1] }}</td>
                     <td>{{ contato[2] }}</td>
                     <td>{{ contato[3] }}</td>
-                    <td>Não atendido</td>
+                    <td>{{ contato[4] }}</td>
                     <td>
-                        {% if contato[10] == 0 %}
-                        <a href="/atendercontato/{{ contato[0] }}" class="botao">Atender</a>
+                        {% if contato[4] == 'Finalizado' %}
+                        <a href="" class="botao">Finalizado</a>
                         {% else %}
                         <a href="/atendercontato/{{ contato[0] }}" class="botao">Atender</a>
                         {% endif %}

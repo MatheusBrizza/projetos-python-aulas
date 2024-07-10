@@ -57,7 +57,7 @@ def conectarBD():
         print("criando tabela contatos")
         connector = mysql.connector.connect(host='127.0.0.1',user='root',password='',database= nome_db)
         executor_comando_sql = connector.cursor()
-        executor_comando_sql.execute('CREATE TABLE contatos (id INT AUTO_INCREMENT PRIMARY KEY,nome VARCHAR(255) NOT NULL,email VARCHAR(255) NOT NULL,mensagem TEXT NOT NULL);')
+        executor_comando_sql.execute('CREATE TABLE contatos (id INT AUTO_INCREMENT PRIMARY KEY,nome VARCHAR(255) NOT NULL,email VARCHAR(255) NOT NULL,mensagem TEXT NOT NULL, situacao VARCHAR(255) NOT NULL);')
         connector.commit()
         connector.close()
  
@@ -84,11 +84,11 @@ def conectarBD():
         connector.commit()
         
         nome="ADMIN"
-        email="a@a.com"
+        email="admin@a.com"
         senha="admin123"
-        sql = "INSERT INTO usuarios (nome, email, senha) VALUES (%s, %s, %s)"
+        comando_sql = "INSERT INTO usuarios (nome, email, senha) VALUES (%s, %s, %s)"
         valores = (nome, email, senha)
-        executor_comando_sql.execute(sql, valores)
+        executor_comando_sql.execute(comando_sql, valores)
         connector.commit()
         connector.close()
 
@@ -108,13 +108,12 @@ def conectarBD():
     if resultado_tb > 0:
         print(f"tabela {tb_usuario_contato} já existe!")
     else:
-        print("criando tabela contatos")
+        print(f"criando tabela usuario_contato")
         connector = mysql.connector.connect(host='127.0.0.1',user='root',password='',database= nome_db)
         executor_comando_sql = connector.cursor()
-        executor_comando_sql.execute('CREATE TABLE usuario_contato (usuario_id INT NOT NULL, contato_id INT NOT NULL, PRIMARY KEY (usuario_id, contato_id), FOREIGN KEY (usuario_id) REFERENCES usuarios(id) ON DELETE CASCADE, FOREIGN KEY (contato_id) REFERENCES contatos(id) ON DELETE CASCADE);')
+        executor_comando_sql.execute('CREATE TABLE usuario_contato (usuario_id INT NOT NULL, contato_id INT NOT NULL, situacao VARCHAR(255) NOT NULL, PRIMARY KEY (usuario_id, contato_id), FOREIGN KEY (usuario_id) REFERENCES usuarios(id) ON DELETE CASCADE, FOREIGN KEY (contato_id) REFERENCES contatos(id) ON DELETE CASCADE);')
         connector.commit()
         connector.close()
-            
     try:
         connector = mysql.connector.connect(host='127.0.0.1',user='root',password='',database= nome_db)
     except mysql.connector.Error as e:
