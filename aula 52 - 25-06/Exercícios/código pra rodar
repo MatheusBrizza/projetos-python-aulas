@@ -3,6 +3,8 @@ flask --app nome_do_arquivo.py run --debug
 pip install Flask-WTF
 pip install Flask-WTF[email]
 pip install Flask-FlashMessages
-
+pip install mysql-connector
+pip install reportlab
+pip install xlsxwriter
 
 depois de enter, clicar na URL que aparece como http://127.0.0.1:5000

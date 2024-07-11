@@ -121,6 +121,18 @@ def atendercontato(id):
         return redirect(url_for('contatos'))
     except Exception as e:
         return render_template('erro_geral', mensagem=str(e))
+
+@app.route('/meuscontatos')
+def listarmeuscontatos():
+    if not session.get('usuario_id'):
+        return redirect(url_for('pagina_login'))
+    usuario_id = session.get('usuario_id')
+    connector = conectarBD()
+    executor_sql = connector.cursor()
+    executor_sql.execute(' SELECT contatos.* FROM contatos INNER JOIN usuario_contato ON usuario_contato.contato_id = contatos.id WHERE usuario_contato.usuario_id = %s order by contatos.id ', (usuario_id,),)
+    contatos = executor_sql.fetchall()
+    return render_template("meuscontatos.html", contatos=contatos) 
+
     
 @app.route('/finalizarcontato/<id>', methods= ['GET', 'POST'])
 def finalizarcontato(id):
@@ -138,7 +150,7 @@ def finalizarcontato(id):
         valores = ("Finalizado", int(usuario_id), int(id))
         executor_sql.execute(comando_sql, valores)
         connector.commit()
-        return redirect(url_for('contatos'))
+        return redirect(url_for('listarmeuscontatos'))
     except Exception as e:
         return render_template('erro_geral', mensagem=str(e))
     
@@ -169,7 +181,7 @@ def novousuario():
         connector = conectarBD()
         
         executor_sql = connector.cursor()
-        executor_sql.execute("""SELECT COUNT(*) FROM usuarios WHERE email = %s;""", (email,))
+        executor_sql.execute('SELECT COUNT(*) FROM usuarios WHERE email = %s;', (email,))
         resultado_usuario = executor_sql.fetchone()[0]
         executor_sql.close()
         connector.close()
@@ -255,6 +267,7 @@ def excluirusuario(id):
         return redirect(url_for('usuarios'))
     except connector.connector.Error as e:
         return render_template('excluirusuario.html', error=str(e))
+
 
 
 if __name__ == '__main__':

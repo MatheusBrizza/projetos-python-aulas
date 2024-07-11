@@ -161,6 +161,11 @@ button[type="submit"] {
   justify-content: center;
 }
 
+.botoes-relatorios {
+  display: flex;
+  justify-content: space-evenly;
+}
+
 .login {
   display: flex;
   flex-direction: column;
