@@ -16,9 +16,9 @@ Contato
       {% if form.email.errors %}
       <span style="color: red;">{{ form.email.errors[0] }}</span>
       {% endif %}
-      {{ form.mensagem}}
-      {% if form.mensagem.errors %}
-      <span style="color: red;">{{ form.mensagem.errors[0] }}</span>
+      {{ form.pedido}}
+      {% if form.pedido.errors %}
+      <span style="color: red;">{{ form.pedido.errors[0] }}</span>
       {% endif %}
       <button type="submit">Enviar</button>
     </form>

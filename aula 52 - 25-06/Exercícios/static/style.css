@@ -172,7 +172,7 @@ button[type="submit"] {
 }
 #nome,
 #email,
-#mensagem,
+#pedido,
 #senha {
   width: 350px;
   padding: .9rem 1.25rem;
@@ -187,7 +187,7 @@ button[type="submit"] {
 
 #nome::placeholder,
 #email::placeholder,
-#mensagem::placeholder,
+#pedido::placeholder,
 #senha::placeholder {
   color: azure;
 }

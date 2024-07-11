@@ -10,7 +10,7 @@ app.config['SECRET_KEY'] = "segredo"
 class FormularioContato(FlaskForm):
     nome = StringField('Nome:', validators=[validators.DataRequired()], render_kw={"placeholder":"Nome"})
     email = StringField('Email:', validators=[validators.DataRequired(), validators.Email()], render_kw={"placeholder":"Email"})
-    mensagem = StringField('Mensagem:', validators=[validators.DataRequired()], render_kw={"placeholder":"Mensagem"})
+    pedido = StringField('Pedido:', validators=[validators.DataRequired()], render_kw={"placeholder":"Pedido"})
     
 class FormularioUsuario(FlaskForm):
     nome = StringField('Nome:', validators=[validators.DataRequired()], render_kw={"placeholder":"Nome"})
@@ -32,7 +32,7 @@ def validar_login():
     connector = conectarBD()
     
     executor_sql = connector.cursor()
-    executor_sql.execute("""SELECT * FROM usuarios WHERE nome = %s AND senha = %s """, (nome, senha,))
+    executor_sql.execute("""SELECT * FROM atendentes WHERE nome = %s AND senha = %s """, (nome, senha,))
     usuario = executor_sql.fetchone()
     executor_sql.close()
     connector.close()
@@ -59,14 +59,14 @@ def contato():
     if form.validate_on_submit():
         nome = form.nome.data
         email = form.email.data
-        mensagem = form.mensagem.data
+        pedido = form.pedido.data
 
         try:
             connector = conectarBD()
             
             executor_sql = connector.cursor()
-            comando_sql = "INSERT INTO contatos (nome, email, mensagem) VALUES (%s, %s, %s)"
-            values = (nome, email, mensagem)
+            comando_sql = "INSERT INTO pedidos (nome, email, pedido) VALUES (%s, %s, %s)"
+            values = (nome, email, pedido)
             executor_sql.execute(comando_sql, values)
             connector.commit()
             
@@ -97,7 +97,7 @@ def erro_geral(e):
 def contatos():
     connector = conectarBD()
     executor_sql = connector.cursor()
-    executor_sql.execute('SELECT * FROM contatos')
+    executor_sql.execute('SELECT * FROM pedidos')
     contatos = executor_sql.fetchall()
     return render_template("contatos.html", contatos=contatos)
 
@@ -109,12 +109,12 @@ def atendercontato(id):
         connector = conectarBD()
         executor_sql = connector.cursor()
         
-        sql = 'UPDATE contatos SET situacao = %s WHERE id = %s;'
+        sql = 'UPDATE pedidos SET situacao = %s WHERE id = %s;'
         valores = ("Em atendimento", int(id))
         executor_sql.execute(sql, valores)
         connector.commit()
 
-        comando_sql = 'INSERT INTO usuario_contato (usuario_id, contato_id, situacao) VALUES (%s, %s, %s);'
+        comando_sql = 'INSERT INTO atendente_pedido (atendente_id, pedido_id, situacao) VALUES (%s, %s, %s);'
         valores = (int(usuario_id), int(id), "Em atendimento")
         executor_sql.execute(comando_sql, valores)
         connector.commit()
@@ -129,7 +129,7 @@ def listarmeuscontatos():
     usuario_id = session.get('usuario_id')
     connector = conectarBD()
     executor_sql = connector.cursor()
-    executor_sql.execute(' SELECT contatos.* FROM contatos INNER JOIN usuario_contato ON usuario_contato.contato_id = contatos.id WHERE usuario_contato.usuario_id = %s order by contatos.id ', (usuario_id,),)
+    executor_sql.execute(' SELECT pedidos.* FROM pedidos INNER JOIN atendente_pedido ON atendente_pedido.pedido_id = pedidos.id WHERE atendente_pedido.atendente_id = %s order by pedidos.id ', (usuario_id,),)
     contatos = executor_sql.fetchall()
     return render_template("meuscontatos.html", contatos=contatos) 
 
@@ -141,12 +141,12 @@ def finalizarcontato(id):
         connector = conectarBD()
         executor_sql = connector.cursor()
         
-        sql = 'UPDATE contatos SET situacao = %s WHERE id = %s;'
+        sql = 'UPDATE pedidos SET situacao = %s WHERE id = %s;'
         valores = ("Finalizado", int(id))
         executor_sql.execute(sql, valores)
         connector.commit()
 
-        comando_sql = 'UPDATE usuario_contato SET situacao = %s WHERE usuario_id = %s AND contato_id = %s;'
+        comando_sql = 'UPDATE atendente_pedido SET situacao = %s WHERE atendente_id = %s AND pedido_id = %s;'
         valores = ("Finalizado", int(usuario_id), int(id))
         executor_sql.execute(comando_sql, valores)
         connector.commit()
@@ -161,7 +161,7 @@ def usuarios():
         return redirect(url_for('pagina_login'))
     connector = conectarBD()
     executor_sql = connector.cursor()
-    executor_sql.execute('SELECT * FROM usuarios')
+    executor_sql.execute('SELECT * FROM atendentes')
     usuarios = executor_sql.fetchall()
     return render_template("usuarios.html", usuarios=usuarios)
 
@@ -181,7 +181,7 @@ def novousuario():
         connector = conectarBD()
         
         executor_sql = connector.cursor()
-        executor_sql.execute('SELECT COUNT(*) FROM usuarios WHERE email = %s;', (email,))
+        executor_sql.execute('SELECT COUNT(*) FROM atendentes WHERE email = %s;', (email,))
         resultado_usuario = executor_sql.fetchone()[0]
         executor_sql.close()
         connector.close()
@@ -193,7 +193,7 @@ def novousuario():
             try:
                 connector = conectarBD()
                 executor_sql = connector.cursor()
-                comando_sql = 'INSERT INTO usuarios (nome, email, senha) VALUES (%s, %s, %s)'
+                comando_sql = 'INSERT INTO atendentes (nome, email, senha) VALUES (%s, %s, %s)'
                 valores = (nome, email, senha)
                 executor_sql.execute(comando_sql, valores)
                 connector.commit()
@@ -219,7 +219,7 @@ def editarusuario(id):
     connector = conectarBD()
     
     executor_sql = connector.cursor()
-    executor_sql.execute("""SELECT id, nome, email FROM usuarios WHERE id = %s;""", (id,))
+    executor_sql.execute("""SELECT id, nome, email FROM atendentes WHERE id = %s;""", (id,))
     dados_usuario = executor_sql.fetchone()
     executor_sql.close()
     connector.close()
@@ -242,7 +242,7 @@ def editarusuario(id):
         connector = conectarBD()
         
         executor_sql = connector.cursor()
-        comando_sql = 'UPDATE usuarios SET nome = %s, email = %s, senha = %s WHERE id = %s;'
+        comando_sql = 'UPDATE atendentes SET nome = %s, email = %s, senha = %s WHERE id = %s;'
         valores = (nome, email, senha, id)
         executor_sql.execute(comando_sql, valores)
         connector.commit()
@@ -259,7 +259,7 @@ def excluirusuario(id):
         connector = conectarBD()
         
         executor_sql = connector.cursor()
-        executor_sql.execute("""DELETE FROM usuarios WHERE id = %s;""", (id,))
+        executor_sql.execute("""DELETE FROM atendentes WHERE id = %s;""", (id,))
         connector.commit()
         executor_sql.close()
         connector.close()
