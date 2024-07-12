@@ -1,18 +1,23 @@
-from flask import Flask, render_template, redirect, url_for, session, request, flash
+import io
+import reportlab
+from flask import Flask, render_template, redirect, url_for, session, request, flash, make_response
 from flask_wtf import FlaskForm
 from wtforms import StringField, validators, PasswordField
 from config_bd import conectarBD
-
+from io import BytesIO
+from xlsxwriter import Workbook
+from reportlab.pdfgen import canvas
+from reportlab.lib.pagesizes import letter
 
 app = Flask(__name__)
-app.config['SECRET_KEY'] = "segredo"
+app.config['SECRET_KEY'] = "wompity womp"
 
-class FormularioContato(FlaskForm):
+class FormularioPedido(FlaskForm):
     nome = StringField('Nome:', validators=[validators.DataRequired()], render_kw={"placeholder":"Nome"})
     email = StringField('Email:', validators=[validators.DataRequired(), validators.Email()], render_kw={"placeholder":"Email"})
     pedido = StringField('Pedido:', validators=[validators.DataRequired()], render_kw={"placeholder":"Pedido"})
     
-class FormularioUsuario(FlaskForm):
+class FormularioAtendente(FlaskForm):
     nome = StringField('Nome:', validators=[validators.DataRequired()], render_kw={"placeholder":"Nome"})
     email = StringField('Email:', validators=[validators.DataRequired(), validators.Email()], render_kw={"placeholder":"Email"})
     senha = PasswordField('Senha:', validators=[validators.DataRequired()], render_kw={"placeholder":"Senha"})
@@ -43,7 +48,7 @@ def validar_login():
     else:
         return redirect(url_for('pagina_login'))
 
-@app.route('/paginainicial')
+@app.route('/homepage')
 def index():
     return render_template("index.html")
 
@@ -52,9 +57,9 @@ def sobre():
     return render_template("sobre.html")
 
 # Telas contatos
-@app.route('/contato', methods=['GET', 'POST'])
-def contato():
-    form = FormularioContato()
+@app.route('/pedido', methods=['GET', 'POST'])
+def pedido():
+    form = FormularioPedido()
     
     if form.validate_on_submit():
         nome = form.nome.data
@@ -73,15 +78,14 @@ def contato():
             print("Salvo com sucesso!")
         except connector.connector.Error as e:
             print(f"Falha ao salvar dados! {e}")
-            mensagem_erro = "Ocorreu um erro ao processar o seu contato. Tente novamente mais tarde."
+            mensagem_erro = "Ocorreu um erro ao processar o seu pedido. Tente novamente mais tarde."
             return render_template('erro.html', mensagem_erro=mensagem_erro), 500
         finally:
             if connector is not None:
                 connector.close()
-
-        return redirect('/sucesso')
+            return redirect('/sucesso')
     else:
-        return render_template("contato.html", form=form)
+        return render_template("pedido.html", form=form)
 
 
 @app.route('/sucesso')
@@ -93,13 +97,16 @@ def erro_geral(e):
     mensagem_erro = str(e)
     return render_template('erro.html', mensagem_erro=mensagem_erro), 500
 
-@app.route('/contatos')
-def contatos():
+@app.route('/lista_pedidos')
+def listar_pedidos():
+    if not session.get('usuario_id'):
+        return redirect(url_for('pagina_login'))
+    
     connector = conectarBD()
     executor_sql = connector.cursor()
-    executor_sql.execute('SELECT * FROM pedidos')
-    contatos = executor_sql.fetchall()
-    return render_template("contatos.html", contatos=contatos)
+    executor_sql.execute('SELECT * FROM pedidos where situacao!="Em atendimento" AND situacao!="Finalizado";')
+    pedidos = executor_sql.fetchall()
+    return render_template("pedidos.html", pedidos=pedidos)# achar como mudar para pedidos
 
 @app.route('/atendercontato/<id>', methods = ['GET', 'POST'])
 def atendercontato(id):
@@ -118,24 +125,25 @@ def atendercontato(id):
         valores = (int(usuario_id), int(id), "Em atendimento")
         executor_sql.execute(comando_sql, valores)
         connector.commit()
-        return redirect(url_for('contatos'))
+        return redirect(url_for('listar_pedidos'))
     except Exception as e:
         return render_template('erro_geral', mensagem=str(e))
 
-@app.route('/meuscontatos')
-def listarmeuscontatos():
+@app.route('/meus_pedidos')
+def listar_meus_pedidos():
     if not session.get('usuario_id'):
         return redirect(url_for('pagina_login'))
+    
     usuario_id = session.get('usuario_id')
     connector = conectarBD()
     executor_sql = connector.cursor()
     executor_sql.execute(' SELECT pedidos.* FROM pedidos INNER JOIN atendente_pedido ON atendente_pedido.pedido_id = pedidos.id WHERE atendente_pedido.atendente_id = %s order by pedidos.id ', (usuario_id,),)
     contatos = executor_sql.fetchall()
-    return render_template("meuscontatos.html", contatos=contatos) 
+    return render_template("meuspedidos.html", contatos=contatos) 
 
     
-@app.route('/finalizarcontato/<id>', methods= ['GET', 'POST'])
-def finalizarcontato(id):
+@app.route('/finalizar_pedido/<id>', methods= ['GET', 'POST'])
+def finalizar_pedido(id):
     usuario_id = session.get('usuario_id')
     try:
         connector = conectarBD()
@@ -150,7 +158,7 @@ def finalizarcontato(id):
         valores = ("Finalizado", int(usuario_id), int(id))
         executor_sql.execute(comando_sql, valores)
         connector.commit()
-        return redirect(url_for('listarmeuscontatos'))
+        return redirect(url_for('listar_meus_pedidos'))
     except Exception as e:
         return render_template('erro_geral', mensagem=str(e))
     
@@ -171,7 +179,7 @@ def novousuario():
     if not session.get('usuario_id'):
         return redirect(url_for('pagina_login'))
 
-    form = FormularioUsuario()
+    form = FormularioAtendente()
     
     if form.validate_on_submit():
         nome = form.nome.data
@@ -268,7 +276,82 @@ def excluirusuario(id):
     except connector.connector.Error as e:
         return render_template('excluirusuario.html', error=str(e))
 
+# gerador relatórios
+@app.route('/relatorios_excel')
+def gerar_relatorio_excel():
+    usuario_id = session.get('usuario_id')
+    
+    connector = conectarBD()
+    executor_sql = connector.cursor()
+    
+    executor_sql.execute('SELECT pedidos.* FROM pedidos INNER JOIN atendente_pedido ON atendente_pedido.pedido_id = pedidos.id WHERE atendente_pedido.atendente_id = %s order by pedidos.id', (usuario_id,),)
 
+    data = []
+    for row in executor_sql.fetchall():
+        data.append(row)
+    
+    output = io.BytesIO()
+    workbook = Workbook(output)
+    worksheet = workbook.add_worksheet()
+    
+    worksheet.write('A1', 'ID')
+    worksheet.write('B1', 'Nome')
+    worksheet.write('C1', 'Email')
+    worksheet.write('D1', 'Pedido')
+    
+    for i, row in enumerate(data):
+        worksheet.write(i +1, 0, row[0])
+        worksheet.write(i +1, 1, row[1])
+        worksheet.write(i +1, 2, row[2])
+        worksheet.write(i +1, 3, row[3])
+    
+    workbook.close()
+    output.seek(0)
+    
+    resposta = make_response(output.read())
+    resposta.headers['Content-Type'] = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+    resposta.headers['Content-Disposition'] = 'attachment; filename=relatorio_contatos.xlsx'
+    
+    return resposta
 
+@app.route('/relatorios_pdf')
+def gerar_relatorio_pdf():
+    usuario_id = session.get('usuario_id')
+    
+    connector = conectarBD()
+    executor_sql = connector.cursor()
+    
+    executor_sql.execute('SELECT pedidos.* FROM pedidos INNER JOIN atendente_pedido ON atendente_pedido.pedido_id = pedidos.id WHERE atendente_pedido.atendente_id = %s order by pedidos.id', (usuario_id,),)
+    
+    data = executor_sql.fetchall()
+    
+    buffer = io.BytesIO()
+    c = canvas.Canvas(buffer, pagesize=letter)
+    c.setTitle('Relatório de Pedidos')
+    
+    c.setFont('Times-Roman', 15)
+    c.drawString(25, 725, 'ID')
+    c.drawString(100, 725, 'Nome')
+    c.drawString(200, 725, 'Email')
+    c.drawString(300, 725, 'Pedido')
+    
+    for i, row in enumerate(data):
+        y = 700 - i * 25
+        c.setFont('Times-Roman', 10)
+        c.drawString(25, y, str(row[0]))
+        c.drawString(100, y, str(row[1]))
+        c.drawString(200, y, str(row[2]))
+        c.drawString(300, y, str(row[3]))
+    
+    c.save()
+    
+    pdf_content = buffer.getvalue()
+    
+    resposta = make_response(pdf_content)
+    resposta.headers['Content-Type'] = 'application/pdf'
+    resposta.headers['Content-Disposition'] = 'attachment; filename=relatorio.pdf'
+    
+    return resposta
+    
 if __name__ == '__main__':
     app.run
