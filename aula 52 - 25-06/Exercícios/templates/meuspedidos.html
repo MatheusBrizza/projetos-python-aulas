@@ -1,17 +1,17 @@
 {% extends 'navbar.html' %}
 {% block titulo %}
-Meus contatos
+Meus pedidos
 {% endblock %}
 {% block conteudo %}
 <section class="container">
-    <h1 class="titulo-contatos">Meus contatos</h1>
+    <h1 class="titulo-contatos">Meus pedidos</h1>
     <section class="tabela-contatos">
         <table>
             <thead class="tabela-cabecalho">
                 <tr>
                     <th>Nome</th>
                     <th>Email</th>
-                    <th>Mensagem</th>
+                    <th>Pedido</th>
                     <th>Situação</th>
                     <th>Ação</th>
                 </tr>
@@ -24,11 +24,15 @@ Meus contatos
                     <td>{{ contato[3] }}</td>
                     <td>{{ contato[4] }}</td>
                     <td>
+                        {% if contato[4] == 'Pronto' %}
+                        <a href="/entregar_pedido/{{contato[0]}}"> Entrega</a>
+                        {% endif %}
                         {% if contato[4] == 'Finalizado' %}
                         <a href="" class="botao">Finalizado</a>
                         {% else %}
-                        <a href="/finalizarcontato/{{ contato[0] }}" class="botao">Atender</a>
+                        <a href="/finalizar_pedido/{{ contato[0] }}" class="botao">Finalizar pedido</a>
                         {% endif %}
+                        
                     </td>
                 </tr>
                 {% endfor %}
@@ -37,10 +41,10 @@ Meus contatos
     </section>
     <section class="botoes-relatorios">
         <div class="botao-container">
-            <a href="/gerarrelatorioexcel" class="botao">Gerar relatório Excel</a>
+            <a href="/relatorios_excel" class="botao">Gerar relatório Excel</a>
         </div>
         <div class="botao-container">
-            <a href="/gerarrelatoriopdf" class="botao">Gerar relatório PDF</a>
+            <a href="/relatorios_pdf" class="botao">Gerar relatório PDF</a>
         </div>
     </section>
 </section>

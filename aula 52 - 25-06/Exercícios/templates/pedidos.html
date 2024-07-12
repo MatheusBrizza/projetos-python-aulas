@@ -1,10 +1,10 @@
 {% extends "navbar.html" %}
 {% block titulo %}
-Lista contatos
+Lista pedidos
 {% endblock %}
 {% block conteudo %}
 <section class="container">
-    <h1 class="titulo-contatos">Contatos</h1>
+    <h1 class="titulo-contatos">Lista pedidos</h1>
     <section class ="tabela-contatos">
         <table>
             <thead class="tabela-cabecalho">
@@ -17,17 +17,17 @@ Lista contatos
                 </tr>
             </thead>
             <tbody>
-                {% for contato in contatos %}
+                {% for pedido in pedidos %}
                 <tr>
-                    <td>{{ contato[1] }}</td>
-                    <td>{{ contato[2] }}</td>
-                    <td>{{ contato[3] }}</td>
+                    <td>{{ pedido[1] }}</td>
+                    <td>{{ pedido[2] }}</td>
+                    <td>{{ pedido[3] }}</td>
                     <td>Não atendido</td>
                     <td>
-                        {% if contato[10] == 0 %}
-                        <a href="/atendercontato/{{ contato[0] }}" class="botao">Atender</a>
+                        {% if pedido[10] == 0 %}
+                        <a href="/atendercontato/{{ pedido[0] }}" class="botao">Atender</a>
                         {% else %}
-                        <a href="/atendercontato/{{ contato[0] }}" class="botao">Atender</a>
+                        <a href="/atendercontato/{{ pedido[0] }}" class="botao">Atender</a>
                         {% endif %}
                     </td>
                 </tr>
