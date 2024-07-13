@@ -17,13 +17,13 @@ class FormularioPedido(FlaskForm):
     email = StringField('Email:', validators=[validators.DataRequired(), validators.Email()], render_kw={"placeholder":"Email"})
     pedido = StringField('Pedido:', validators=[validators.DataRequired()], render_kw={"placeholder":"Pedido"})
     
-class FormularioAtendente(FlaskForm):
+class FormularioUsuario(FlaskForm):
     nome = StringField('Nome:', validators=[validators.DataRequired()], render_kw={"placeholder":"Nome"})
     email = StringField('Email:', validators=[validators.DataRequired(), validators.Email()], render_kw={"placeholder":"Email"})
     senha = PasswordField('Senha:', validators=[validators.DataRequired()], render_kw={"placeholder":"Senha"})
 
 
-@app.route('/', methods=['GET', 'POST'])
+@app.route('/login', methods=['GET', 'POST'])
 def pagina_login():
     session.clear()
     session.pop('usuario_id', None)
@@ -37,7 +37,7 @@ def validar_login():
     connector = conectarBD()
     
     executor_sql = connector.cursor()
-    executor_sql.execute("""SELECT * FROM atendentes WHERE nome = %s AND senha = %s """, (nome, senha,))
+    executor_sql.execute('SELECT * FROM usuarios WHERE nome = %s AND senha = %s ', (nome, senha,))
     usuario = executor_sql.fetchone()
     executor_sql.close()
     connector.close()
@@ -48,7 +48,7 @@ def validar_login():
     else:
         return redirect(url_for('pagina_login'))
 
-@app.route('/homepage')
+@app.route('/')
 def index():
     return render_template("index.html")
 
@@ -56,7 +56,7 @@ def index():
 def sobre():
     return render_template("sobre.html")
 
-# Telas contatos
+# Telas pedidos
 @app.route('/pedido', methods=['GET', 'POST'])
 def pedido():
     form = FormularioPedido()
@@ -70,9 +70,7 @@ def pedido():
             connector = conectarBD()
             
             executor_sql = connector.cursor()
-            comando_sql = "INSERT INTO pedidos (nome, email, pedido) VALUES (%s, %s, %s)"
-            values = (nome, email, pedido)
-            executor_sql.execute(comando_sql, values)
+            executor_sql.execute("INSERT INTO pedidos (nome, email, pedido) VALUES (%s, %s, %s)", (nome, email, pedido))
             connector.commit()
             
             print("Salvo com sucesso!")
@@ -106,24 +104,24 @@ def listar_pedidos():
     executor_sql = connector.cursor()
     executor_sql.execute('SELECT * FROM pedidos where situacao!="Em atendimento" AND situacao!="Finalizado";')
     pedidos = executor_sql.fetchall()
-    return render_template("pedidos.html", pedidos=pedidos)# achar como mudar para pedidos
+    return render_template("pedidos.html", pedidos=pedidos)
 
-@app.route('/atendercontato/<id>', methods = ['GET', 'POST'])
-def atendercontato(id):
+@app.route('/atender_pedido/<id>', methods = ['GET', 'POST'])
+def atenderpedido(id):
     
     usuario_id = session.get('usuario_id')
     try:
         connector = conectarBD()
         executor_sql = connector.cursor()
         
-        sql = 'UPDATE pedidos SET situacao = %s WHERE id = %s;'
-        valores = ("Em atendimento", int(id))
-        executor_sql.execute(sql, valores)
+        # sql = 'UPDATE pedidos SET situacao = %s WHERE id = %s;'
+        # valores = ("Em atendimento", int(id))
+        executor_sql.execute('UPDATE pedidos SET situacao = %s WHERE id = %s;', ("Em atendimento", int(id)))
         connector.commit()
 
-        comando_sql = 'INSERT INTO atendente_pedido (atendente_id, pedido_id, situacao) VALUES (%s, %s, %s);'
-        valores = (int(usuario_id), int(id), "Em atendimento")
-        executor_sql.execute(comando_sql, valores)
+        # comando_sql = 'INSERT INTO usuario_pedido (usuario_id, pedido_id, situacao) VALUES (%s, %s, %s);'
+        # valores = (int(usuario_id), int(id), "Em atendimento")
+        executor_sql.execute('INSERT INTO usuario_pedido (usuario_id, pedido_id, situacao) VALUES (%s, %s, %s);', (int(usuario_id), int(id), "Em atendimento"))
         connector.commit()
         return redirect(url_for('listar_pedidos'))
     except Exception as e:
@@ -137,9 +135,29 @@ def listar_meus_pedidos():
     usuario_id = session.get('usuario_id')
     connector = conectarBD()
     executor_sql = connector.cursor()
-    executor_sql.execute(' SELECT pedidos.* FROM pedidos INNER JOIN atendente_pedido ON atendente_pedido.pedido_id = pedidos.id WHERE atendente_pedido.atendente_id = %s order by pedidos.id ', (usuario_id,),)
-    contatos = executor_sql.fetchall()
-    return render_template("meuspedidos.html", contatos=contatos) 
+    executor_sql.execute(' SELECT pedidos.* FROM pedidos INNER JOIN usuario_pedido ON usuario_pedido.pedido_id = pedidos.id WHERE usuario_pedido.usuario_id = %s order by pedidos.id ', (usuario_id,),)
+    pedidos = executor_sql.fetchall()
+    return render_template("meuspedidos.html", pedidos=pedidos) 
+
+@app.route('/entregar_pedido/<id>', methods=['GET', 'POST'])
+def entregar_pedido(id):
+    usuario_id = session.get('usuario_id')
+    try:
+        connector = conectarBD()
+        executor_sql = connector.cursor()
+        
+        # sql = 'UPDATE pedidos SET situacao = %s WHERE id = %s;'
+        # valores = ("A caminho do cliente", int(id))
+        executor_sql.execute('UPDATE pedidos SET situacao = %s WHERE id = %s;', ("A caminho do cliente", int(id)))
+        connector.commit()
+
+        # comando_sql = 'UPDATE usuario_pedido SET situacao = %s WHERE usuario_id = %s AND pedido_id = %s;'
+        # valores = ("A caminho do cliente", int(usuario_id), int(id))
+        executor_sql.execute('UPDATE usuario_pedido SET situacao = %s WHERE usuario_id = %s AND pedido_id = %s;', ("A caminho do cliente", int(usuario_id), int(id)))
+        connector.commit()
+        return redirect(url_for('listar_meus_pedidos'))
+    except Exception as e:
+        return render_template('erro_geral', mensagem=str(e))
 
     
 @app.route('/finalizar_pedido/<id>', methods= ['GET', 'POST'])
@@ -149,14 +167,14 @@ def finalizar_pedido(id):
         connector = conectarBD()
         executor_sql = connector.cursor()
         
-        sql = 'UPDATE pedidos SET situacao = %s WHERE id = %s;'
-        valores = ("Finalizado", int(id))
-        executor_sql.execute(sql, valores)
+        # sql = 'UPDATE pedidos SET situacao = %s WHERE id = %s;'
+        # valores = ("Finalizado", int(id))
+        executor_sql.execute('UPDATE pedidos SET situacao = %s WHERE id = %s;', ("Finalizado", int(id)))
         connector.commit()
 
-        comando_sql = 'UPDATE atendente_pedido SET situacao = %s WHERE atendente_id = %s AND pedido_id = %s;'
-        valores = ("Finalizado", int(usuario_id), int(id))
-        executor_sql.execute(comando_sql, valores)
+        # comando_sql = 'UPDATE usuario_pedido SET situacao = %s WHERE usuario_id = %s AND pedido_id = %s;'
+        # valores = ("Finalizado", int(usuario_id), int(id))
+        executor_sql.execute('UPDATE usuario_pedido SET situacao = %s WHERE usuario_id = %s AND pedido_id = %s;', ("Finalizado", int(usuario_id), int(id)))
         connector.commit()
         return redirect(url_for('listar_meus_pedidos'))
     except Exception as e:
@@ -169,7 +187,7 @@ def usuarios():
         return redirect(url_for('pagina_login'))
     connector = conectarBD()
     executor_sql = connector.cursor()
-    executor_sql.execute('SELECT * FROM atendentes')
+    executor_sql.execute('SELECT * FROM usuarios')
     usuarios = executor_sql.fetchall()
     return render_template("usuarios.html", usuarios=usuarios)
 
@@ -179,7 +197,7 @@ def novousuario():
     if not session.get('usuario_id'):
         return redirect(url_for('pagina_login'))
 
-    form = FormularioAtendente()
+    form = FormularioUsuario()
     
     if form.validate_on_submit():
         nome = form.nome.data
@@ -189,7 +207,7 @@ def novousuario():
         connector = conectarBD()
         
         executor_sql = connector.cursor()
-        executor_sql.execute('SELECT COUNT(*) FROM atendentes WHERE email = %s;', (email,))
+        executor_sql.execute('SELECT COUNT(*) FROM usuarios WHERE email = %s;', (email,))
         resultado_usuario = executor_sql.fetchone()[0]
         executor_sql.close()
         connector.close()
@@ -201,9 +219,9 @@ def novousuario():
             try:
                 connector = conectarBD()
                 executor_sql = connector.cursor()
-                comando_sql = 'INSERT INTO atendentes (nome, email, senha) VALUES (%s, %s, %s)'
-                valores = (nome, email, senha)
-                executor_sql.execute(comando_sql, valores)
+                # comando_sql = 'INSERT INTO usuarios (nome, email, senha) VALUES (%s, %s, %s)'
+                # valores = (nome, email, senha)
+                executor_sql.execute('INSERT INTO usuarios (nome, email, senha) VALUES (%s, %s, %s)', (nome, email, senha))
                 connector.commit()
                 executor_sql.close()
                 connector.close()
@@ -211,7 +229,7 @@ def novousuario():
                 return redirect(url_for('usuarios'))
             except connector.connector.Error as e:
                 print(f"Falha ao salvar dados! {e}")
-                mensagem_erro = "Ocorreu um erro ao processar o seu contato. Tente novamente mais tarde."
+                mensagem_erro = "Ocorreu um erro ao processar o seu pedido. Tente novamente mais tarde."
                 return render_template('erro.html', mensagem_erro = mensagem_erro), 500
             finally:
                 if connector is not None:
@@ -227,7 +245,7 @@ def editarusuario(id):
     connector = conectarBD()
     
     executor_sql = connector.cursor()
-    executor_sql.execute("""SELECT id, nome, email FROM atendentes WHERE id = %s;""", (id,))
+    executor_sql.execute('SELECT id, nome, email FROM usuarios WHERE id = %s;', (id,))
     dados_usuario = executor_sql.fetchone()
     executor_sql.close()
     connector.close()
@@ -250,9 +268,9 @@ def editarusuario(id):
         connector = conectarBD()
         
         executor_sql = connector.cursor()
-        comando_sql = 'UPDATE atendentes SET nome = %s, email = %s, senha = %s WHERE id = %s;'
-        valores = (nome, email, senha, id)
-        executor_sql.execute(comando_sql, valores)
+        # comando_sql = 'UPDATE usuarios SET nome = %s, email = %s, senha = %s WHERE id = %s;'
+        # valores = (nome, email, senha, id)
+        executor_sql.execute('UPDATE usuarios SET nome = %s, email = %s, senha = %s WHERE id = %s;', (nome, email, senha, id))
         connector.commit()
         executor_sql.close()
         connector.close()
@@ -267,7 +285,7 @@ def excluirusuario(id):
         connector = conectarBD()
         
         executor_sql = connector.cursor()
-        executor_sql.execute("""DELETE FROM atendentes WHERE id = %s;""", (id,))
+        executor_sql.execute('DELETE FROM usuarios WHERE id = %s;', (id,))
         connector.commit()
         executor_sql.close()
         connector.close()
@@ -284,7 +302,7 @@ def gerar_relatorio_excel():
     connector = conectarBD()
     executor_sql = connector.cursor()
     
-    executor_sql.execute('SELECT pedidos.* FROM pedidos INNER JOIN atendente_pedido ON atendente_pedido.pedido_id = pedidos.id WHERE atendente_pedido.atendente_id = %s order by pedidos.id', (usuario_id,),)
+    executor_sql.execute('SELECT pedidos.* FROM pedidos INNER JOIN usuario_pedido ON usuario_pedido.pedido_id = pedidos.id WHERE usuario_pedido.usuario_id = %s order by pedidos.id', (usuario_id,),)
 
     data = []
     for row in executor_sql.fetchall():
@@ -310,7 +328,7 @@ def gerar_relatorio_excel():
     
     resposta = make_response(output.read())
     resposta.headers['Content-Type'] = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
-    resposta.headers['Content-Disposition'] = 'attachment; filename=relatorio_contatos.xlsx'
+    resposta.headers['Content-Disposition'] = 'attachment; filename=relatorio_pedidos.xlsx'
     
     return resposta
 
@@ -321,7 +339,7 @@ def gerar_relatorio_pdf():
     connector = conectarBD()
     executor_sql = connector.cursor()
     
-    executor_sql.execute('SELECT pedidos.* FROM pedidos INNER JOIN atendente_pedido ON atendente_pedido.pedido_id = pedidos.id WHERE atendente_pedido.atendente_id = %s order by pedidos.id', (usuario_id,),)
+    executor_sql.execute('SELECT pedidos.* FROM pedidos INNER JOIN usuario_pedido ON usuario_pedido.pedido_id = pedidos.id WHERE usuario_pedido.usuario_id = %s order by pedidos.id', (usuario_id,),)
     
     data = executor_sql.fetchall()
     

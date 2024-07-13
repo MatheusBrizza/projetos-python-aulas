@@ -2,8 +2,8 @@ import mysql.connector
 
 nome_db = "senac_pizzaria"
 tb_pedidos = "pedidos"
-tb_atendentes = "atendentes"
-tb_atendente_pedido = "atendente_pedido"
+tb_usuarios = "usuarios"
+tb_usuario_pedido = "usuario_pedido"
 def conectarBD():
     connector = mysql.connector.connect(
         host='127.0.0.1',
@@ -70,23 +70,23 @@ def conectarBD():
     )
         
     executor_comando_sql = connector.cursor() # também é necessário reiniciar a variável pois também senão dá o erro ReferenceError: weakly-referenced object no longer exists já que a variável anterior se referia apenas ao uso para procurar o banco de dados 
-    executor_comando_sql.execute(f"SELECT EXISTS (SELECT * FROM information_schema.tables WHERE table_schema = '{nome_db}'  AND table_name = '{tb_atendentes}');")
+    executor_comando_sql.execute(f"SELECT EXISTS (SELECT * FROM information_schema.tables WHERE table_schema = '{nome_db}'  AND table_name = '{tb_usuarios}');")
     resultado_tb = executor_comando_sql.fetchone()[0]
     connector.close()
 
     if resultado_tb > 0:
-        print(f"tabela {tb_atendentes} já existe!")
+        print(f"tabela {tb_usuarios} já existe!")
     else:
         print("criando tabela atendendes")
         connector = mysql.connector.connect(host='127.0.0.1',user='root',password='',database= nome_db)
         executor_comando_sql = connector.cursor()
-        executor_comando_sql.execute('CREATE TABLE atendentes (id INT AUTO_INCREMENT PRIMARY KEY, nome VARCHAR(255), email VARCHAR(255),senha VARCHAR(255));')
+        executor_comando_sql.execute('CREATE TABLE usuarios (id INT AUTO_INCREMENT PRIMARY KEY, nome VARCHAR(255), email VARCHAR(255),senha VARCHAR(255));')
         connector.commit()
         
         nome="ADMIN"
         email="admin@a.com"
         senha="admin123"
-        comando_sql = "INSERT INTO atendentes (nome, email, senha) VALUES (%s, %s, %s)"
+        comando_sql = "INSERT INTO usuarios (nome, email, senha) VALUES (%s, %s, %s)"
         valores = (nome, email, senha)
         executor_comando_sql.execute(comando_sql, valores)
         connector.commit()
@@ -101,17 +101,17 @@ def conectarBD():
     )
 
     executor_comando_sql = connector.cursor() # também é necessário reiniciar a variável pois também senão dá o erro ReferenceError: weakly-referenced object no longer exists já que a variável anterior se referia apenas ao uso para procurar o banco de dados 
-    executor_comando_sql.execute(f"SELECT EXISTS (SELECT * FROM information_schema.tables WHERE table_schema = '{nome_db}'  AND table_name = '{tb_atendente_pedido}');")
+    executor_comando_sql.execute(f"SELECT EXISTS (SELECT * FROM information_schema.tables WHERE table_schema = '{nome_db}'  AND table_name = '{tb_usuario_pedido}');")
     resultado_tb = executor_comando_sql.fetchone()[0]
     connector.close()
 
     if resultado_tb > 0:
-        print(f"tabela {tb_atendente_pedido} já existe!")
+        print(f"tabela {tb_usuario_pedido} já existe!")
     else:
-        print(f"criando tabela atendente_pedido")
+        print(f"criando tabela usuario_pedido")
         connector = mysql.connector.connect(host='127.0.0.1',user='root',password='',database= nome_db)
         executor_comando_sql = connector.cursor()
-        executor_comando_sql.execute('CREATE TABLE atendente_pedido (atendente_id INT NOT NULL, pedido_id INT NOT NULL, situacao VARCHAR(255) NOT NULL, PRIMARY KEY (atendente_id, pedido_id), FOREIGN KEY (atendente_id) REFERENCES atendentes(id) ON DELETE CASCADE, FOREIGN KEY (pedido_id) REFERENCES pedidos(id) ON DELETE CASCADE);')
+        executor_comando_sql.execute('CREATE TABLE usuario_pedido (usuario_id INT NOT NULL, pedido_id INT NOT NULL, situacao VARCHAR(255) NOT NULL, PRIMARY KEY (usuario_id, pedido_id), FOREIGN KEY (usuario_id) REFERENCES usuarios(id) ON DELETE CASCADE, FOREIGN KEY (pedido_id) REFERENCES pedidos(id) ON DELETE CASCADE);')
         connector.commit()
         connector.close()
     try:

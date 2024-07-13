@@ -25,9 +25,9 @@ Lista pedidos
                     <td>Não atendido</td>
                     <td>
                         {% if pedido[10] == 0 %}
-                        <a href="/atendercontato/{{ pedido[0] }}" class="botao">Atender</a>
+                        <a href="/atender_pedido/{{ pedido[0] }}" class="botao">Atender</a>
                         {% else %}
-                        <a href="/atendercontato/{{ pedido[0] }}" class="botao">Atender</a>
+                        <a href="/atender_pedido/{{ pedido[0] }}" class="botao">Atender</a>
                         {% endif %}
                     </td>
                 </tr>
