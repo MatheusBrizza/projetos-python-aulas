@@ -3,7 +3,7 @@ html, body {
     padding: 0;
 }
 body {
-    background-image: url(./Pizza-3007395.jpg);
+    background-image: url(/exemplo_django/main_app/static/Pizza-3007395.jpg);
     background-size: cover;
     height: 100vh;
     width: 100vw;
