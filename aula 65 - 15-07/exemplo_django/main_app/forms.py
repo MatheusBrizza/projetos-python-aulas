@@ -1,8 +1,8 @@
 from django import forms
-from .models import Pedido
+from .models import Contato
 
-class PedidoForm(forms.ModelForm):
+class ContatoForm(forms.ModelForm):
     class Meta:
-        model = Pedido
-        fields = ['nome', 'email', 'pedido']
+        model = Contato
+        fields = ['nome', 'email', 'mensagem']
         

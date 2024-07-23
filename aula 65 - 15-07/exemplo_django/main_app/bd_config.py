@@ -1,9 +1,9 @@
 import mysql.connector
 
 nome_bd = "senac_pizzaria"
-tb_pedidos = "pedidos"
+tb_contato = "contatos"
 tb_usuarios = "usuarios"
-tb_usuario_pedido = "usuario_pedido"
+tb_usuario_contato = "usuario_contato"
 
 def conectarDB():
     # Verificando e criando banco de dados
@@ -26,20 +26,20 @@ def conectarDB():
         connector.commit()
         connector.close()
 
-    #Verificando e criando tabela pedidos
+    #Verificando e criando tabela contatos
     connector = mysql.connector.connect(host='127.0.0.1', user='root', password='', database=nome_bd)
     cursor = connector.cursor()
-    cursor.execute(f"SELECT EXISTS (SELECT * FROM information_schema.tables WHERE table_schema = '{nome_bd}'  AND table_name = '{tb_pedidos}');")
+    cursor.execute(f"SELECT EXISTS (SELECT * FROM information_schema.tables WHERE table_schema = '{nome_bd}'  AND table_name = '{tb_contato}');")
     resultado_tb = cursor.fetchone()[0]
     connector.close()
 
     if resultado_tb > 0:
-        print(f"tabela {tb_pedidos} já existe!")
+        print(f"tabela {tb_contato} já existe!")
     else:
-        print("criando tabela pedidos")
+        print("criando tabela contatos")
         connector = mysql.connector.connect(host='127.0.0.1',user='root',password='',database= nome_bd)
         cursor = connector.cursor()
-        cursor.execute('CREATE TABLE pedidos (id INT AUTO_INCREMENT PRIMARY KEY,nome VARCHAR(255) NOT NULL,email VARCHAR(255) NOT NULL,pedido TEXT NOT NULL, situacao VARCHAR(255) NOT NULL);')
+        cursor.execute('CREATE TABLE contatos (id INT AUTO_INCREMENT PRIMARY KEY,nome VARCHAR(255) NOT NULL,email VARCHAR(255) NOT NULL,mensagem TEXT NOT NULL, situacao VARCHAR(255) NOT NULL);')
         connector.commit()
         connector.close()
 
@@ -66,21 +66,21 @@ def conectarDB():
         connector.commit()
         connector.close()
 
-    # Verificando e criando tabela usuario_pedido    
+    # Verificando e criando tabela usuario_contato    
     connector = mysql.connector.connect(host='127.0.0.1', user='root', password='', database= nome_bd)
 
     cursor = connector.cursor()
-    cursor.execute(f"SELECT EXISTS (SELECT * FROM information_schema.tables WHERE table_schema = '{nome_bd}'  AND table_name = '{tb_usuario_pedido}');")
+    cursor.execute(f"SELECT EXISTS (SELECT * FROM information_schema.tables WHERE table_schema = '{nome_bd}'  AND table_name = '{tb_usuario_contato}');")
     resultado_tb = cursor.fetchone()[0]
     connector.close()
 
     if resultado_tb > 0:
-        print(f"tabela {tb_usuario_pedido} já existe!")
+        print(f"tabela {tb_usuario_contato} já existe!")
     else:
-        print("Criando tabela usuario_pedido")
+        print("Criando tabela usuario_contato")
         connector = mysql.connector.connect(host='127.0.0.1', user='root', password='', database= nome_bd)
         cursor = connector.cursor()
-        cursor.execute('CREATE TABLE usuario_pedido (usuario_id INT NOT NULL, pedido_id INT NOT NULL, situacao VARCHAR(255) NOT NULL, PRIMARY KEY (usuario_id, pedido_id), FOREIGN KEY (usuario_id) REFERENCES usuarios(id) ON DELETE CASCADE, FOREIGN KEY (pedido_id) REFERENCES pedidos(id) ON DELETE CASCADE);')
+        cursor.execute('CREATE TABLE usuario_contato (usuario_id INT NOT NULL, contato_id INT NOT NULL, situacao VARCHAR(255) NOT NULL, PRIMARY KEY (usuario_id, contato_id), FOREIGN KEY (usuario_id) REFERENCES usuarios(id) ON DELETE CASCADE, FOREIGN KEY (contato_id) REFERENCES contatos(id) ON DELETE CASCADE);')
         connector.commit()
         connector.close()
     try:
