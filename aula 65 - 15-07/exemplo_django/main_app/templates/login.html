@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <link rel="stylesheet" href="{{ STATIC_URL }}static/reset.css">
+    <link rel="stylesheet" href="{{ STATIC_URL }}static/styles.css">
+    {%load static%} 
+</head>
+
+<body>
+    <section>
+        <div class="container-login">
+            <h1>Sistema Senac Pizzaria</h1>
+
+            <form method="POST">
+                {% csrf_token %}
+                <div class="login">
+                    <input class="inputs" type="text" name="nome" placeholder="Nome usuário">
+                    <input class="inputs" type="password" name="senha" placeholder="Senha">
+                    <button type="submit">Entrar</button>
+                </div>
+            </form>
+        </div>
+    </section>
+</body>
+
+</html>
