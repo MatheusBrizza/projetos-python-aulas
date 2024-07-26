@@ -1,0 +1,33 @@
+{% extends 'navbar.html' %}
+{% block titulo %}
+Editar Usuario
+{% endblock %}
+{% block conteudo %}
+{%load static%}
+<body>
+    <section>
+        <div class="flex-container">
+            <h1>Editando usuário</h1>
+
+            <form action="/editar_usuario/{{id}}" method="POST">
+                {% csrf_token %}                
+                <div class="login">
+                    <input class="inputs" type="text" name="nome" placeholder="Nome">
+                    <input class="inputs" type="email" name="email" placeholder="Email">
+                    <input class="inputs" type="password" name="senha" placeholder="Senha">
+                    <button type="submit">Atualizar</button>
+                </div>
+                <script>
+                    //Limpa os campos do formulário ao entrar na tela
+                    $(document).ready(function () {
+                        $('input[name="nome"]').val('');
+                        $('input[name="email"]').val('');
+                        $('input[name="senha"]').val('');
+                    });
+                </script>
+            </form>
+        </div>
+    </section>
+</body>
+
+{% endblock %}

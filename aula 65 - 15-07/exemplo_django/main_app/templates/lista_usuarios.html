@@ -1,0 +1,36 @@
+{% extends "navbar.html" %}
+{% block titulo %}
+Lista usuarios
+{% endblock %}
+{% block conteudo %}
+<section class="container">
+    <h1 class="titulo-contatos">Usuários</h1>
+    <section class="tabela-contatos">
+        <table>
+            <thead class="tabela-cabecalho">
+                <tr>
+                    <th>Nome</th>
+                    <th>Email</th>
+                    <th>Ação</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for usuario in usuarios %}
+                <tr>
+                    <td>{{ usuario.1 }}</td>
+                    <td>{{ usuario.2 }}</td>
+                    <td>
+                        <a href="/editar_usuario/{{ usuario.0}}" class="botao">Editar</a>
+                        <a href="/excluir_usuario/{{ usuario.0}}" class="botao excluir">Excluir</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </section>
+    <div class="botao-container">
+        <a href="/novo_usuario" class="botao">Cadastrar usuário</a>
+    </div>
+</section>
+
+{% endblock %}

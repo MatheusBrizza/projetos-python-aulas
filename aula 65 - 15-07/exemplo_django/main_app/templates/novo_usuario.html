@@ -1,0 +1,30 @@
+{% extends 'navbar.html' %}
+{% block titulo %}
+Cadastro de usuário
+{% endblock %}
+{% block conteudo %}
+<section>
+    <div class="flex-container">
+        <h2>Cadastrar Usuário</h2>
+
+        <form method="POST">
+            {% csrf_token %}
+            <div class="login">
+                <input class="inputs" type="text" name="nome" placeholder="Nome usuário">
+                <input class="inputs" type="email" name="email" placeholder="Email">
+                <input class="inputs" type="password" name="senha" placeholder="Senha">
+
+                <button type="submit">Cadastrar</button>
+            </div>
+            <script>
+                $(document).ready(function () {
+                    $('input[name="nome"]').val('');
+                    $('input[name="email"]').val('');
+                    $('input[name="senha"]').val('');
+                });
+            </script>
+
+        </form>
+    </div>
+</section>
+{% endblock %}
