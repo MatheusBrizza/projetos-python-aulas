@@ -11,6 +11,7 @@ Meus contatos
                 <tr>
                     <th>Nome</th>
                     <th>Email</th>
+                    <th>Assunto</th>
                     <th>Mensagem</th>
                     <th>Situação</th>
                     <th>Ação</th>
@@ -23,10 +24,11 @@ Meus contatos
                     <td>{{ contato.2 }}</td>
                     <td>{{ contato.3 }}</td>
                     <td>{{ contato.4 }}</td>
+                    <td>{{ contato.5 }}</td>
                     <td>
-                        {% if contato.4 == 'Finalizado' %}
+                        {% if contato.5 == 'Finalizado' %}
                         <a href="" class="botao">Finalizado</a>
-                        {% elif contato.4 == 'Em Atendimento' %}
+                        {% elif contato.5 == 'Em Atendimento' %}
                         <a href="/finalizar_contato/{{ contato.0 }}" class="botao">Finalizar contato</a>                        
                         {% endif %}
                     </td>

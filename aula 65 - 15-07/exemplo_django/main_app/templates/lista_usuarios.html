@@ -21,7 +21,10 @@ Lista usuarios
                     <td>{{ usuario.2 }}</td>
                     <td>
                         <a href="/editar_usuario/{{ usuario.0}}" class="botao">Editar</a>
+                        {%if usuario.1 == 'ADMIN'%}
+                        {%else%}
                         <a href="/excluir_usuario/{{ usuario.0}}" class="botao excluir">Excluir</a>
+                        {%endif%}
                     </td>
                 </tr>
                 {% endfor %}

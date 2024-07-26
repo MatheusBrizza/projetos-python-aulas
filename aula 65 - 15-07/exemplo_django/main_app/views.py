@@ -6,6 +6,7 @@ from django.contrib import messages
 
 def login(request):
     request.session['usuario_id'] = ""
+    request.session['usuario_nome'] = ""
     try:
         if request.method == "POST":
             connector = conectarDB()
@@ -18,9 +19,10 @@ def login(request):
             usuario = cursor.fetchone()
             cursor.close()
             connector.close()
+            
             if usuario:
                 request.session['usuario_id'] = usuario[0]
-                
+                request.session['usuario_nome'] = usuario[1]
                 return redirect('index')
             else:
                 print('Nome de usuário ou senha inválidos')
@@ -31,8 +33,13 @@ def login(request):
     except Exception as e:
         mensagem_erro = f"Erro ao conectar com banco de dados: {e}"
         return render(request, 'login.html', {'mensagem_erro': mensagem_erro})
- 
+
+def logout(request):
+    request.session.flush()
+    return redirect('index')
+
 def index(request):
+    
     return render(request, 'Guia/index.html')
 
 def contato(request):
@@ -44,10 +51,11 @@ def contato(request):
 
                 nome = form.cleaned_data['nome']
                 email = form.cleaned_data['email']
+                assunto = form.cleaned_data['assunto']
                 mensagem = form.cleaned_data['mensagem']
 
                 cursor = connector.cursor()
-                cursor.execute('INSERT INTO contatos (nome, email, mensagem, situacao) VALUES (%s, %s, %s, %s);', (nome, email, mensagem, "Não atendido"))
+                cursor.execute('INSERT INTO contatos (nome, email, assunto, mensagem, situacao) VALUES (%s, %s, %s, %s, %s);', (nome, email, assunto, mensagem, "Não atendido"))
                 connector.commit()
                 
                 print('Contato realizado com sucesso!')

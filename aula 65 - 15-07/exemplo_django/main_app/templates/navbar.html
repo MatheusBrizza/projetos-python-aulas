@@ -21,17 +21,28 @@
                 <a href="/">Página inicial</a>
             </li>
             <li>
-                <a href="/contato">Contato</a>
+                <a href="/contato"> Fale conosco</a>
             </li>
-            <li>
-                <a href="/contatos">Lista de contatos</a>
-            </li>
-            <li>
-                <a href="/meus_contatos">Meus contatos</a>
-            </li>
-            <li>
-                <a href="/lista_usuarios">Lista usuarios</a>
-            </li>
+            {% if request.session.usuario_id %}
+                <li>
+                    <a href="/contatos">Lista de contatos</a>
+                </li>
+                <li>
+                    <a href="/meus_contatos">Meus contatos</a>
+                </li>
+                {% if request.session.usuario_nome == 'ADMIN' %}
+                    <li>
+                        <a href="/lista_usuarios">Lista usuarios</a>
+                    </li>
+                {%endif%}
+                <li>
+                    <a href="/logout">Logout</a>
+                </li>
+            {% else %}
+                <li>
+                    <a href="/login">Login</a>
+                </li>
+            {%endif%}
         </ul>
     </nav>
     {% block conteudo %}
