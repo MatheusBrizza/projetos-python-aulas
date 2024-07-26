@@ -39,7 +39,7 @@ def conectarDB():
         print("criando tabela contatos")
         connector = mysql.connector.connect(host='127.0.0.1',user='root',password='',database= nome_bd)
         cursor = connector.cursor()
-        cursor.execute('CREATE TABLE contatos (id INT AUTO_INCREMENT PRIMARY KEY,nome VARCHAR(255) NOT NULL,email VARCHAR(255) NOT NULL,mensagem TEXT NOT NULL, situacao VARCHAR(255) NOT NULL);')
+        cursor.execute('CREATE TABLE contatos (id INT AUTO_INCREMENT PRIMARY KEY,nome VARCHAR(255) NOT NULL,email VARCHAR(255) NOT NULL,assunto VARCHAR(50), mensagem TEXT NOT NULL, situacao VARCHAR(255) NOT NULL);')
         connector.commit()
         connector.close()
 
