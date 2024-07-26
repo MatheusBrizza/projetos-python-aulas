@@ -7,7 +7,7 @@
 nav {
   display: flex;
   justify-content: space-around;
-  background-color: rgba(0, 0, 139, 0.708);
+  background-color: rgba(239, 128, 0, 0.849);
   padding: 10px 0px;
 }
 
@@ -16,7 +16,7 @@ ul {
   display: flex;
 }
 
-a {
+li>a {
   text-decoration: none;
   color: azure;
 }
@@ -35,7 +35,6 @@ li {
 section {
   display: flex;
   justify-content: center;
-
 }
 
 table {
@@ -67,13 +66,20 @@ p {
   margin-top: 7.5rem;
   display: flex;
   padding: 40px;
-  background-color: var(--cor-fundo);
+  /* background-color: var(--cor-fundo); */
   flex-direction: column;
   justify-content: center;
 }
 
 .container>h1 {
   text-align: center;
+}
+
+.container-texto {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 
 .container-login {
@@ -84,7 +90,7 @@ p {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  background-color: var(--cor-fundo);
+  /* background-color: var(--cor-fundo); */
 
 }
 
@@ -96,20 +102,23 @@ p {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  background-color: var(--cor-fundo);
+  /* background-color: var(--cor-fundo); */
 }
 
-.inputs {
+.inputs, p>input, p>textarea, p>select  {
   width: 350px;
   padding: .9rem 1.25rem;
   margin-bottom: 20px;
   border: 1px solid rgba(0, 0, 0, 0.15);
-  background-color: rgba(0, 0, 0, 0.5);
+  /* background-color: rgba(0, 0, 0, 0.5); */
   background-clip: padding-box;
   font-size: 1.15rem;
-  color: azure;
   font-family: var(--font-texto);
 }
+::placeholder {
+  color: black;
+}
+
 
 input[type="text"],
 input[type="email"] {
@@ -117,10 +126,11 @@ input[type="email"] {
 }
 
 button[type="submit"] {
-  width: 9rem;
+  width: 350px;
   padding: 1rem 2.1rem;
   border: none;
-  background-color: rgba(0, 0, 0, 0.3);
+  border-radius: 10px;
+  background-color: blue;
   font-size: 1.3rem;
   color: azure;
   font-family: var(--font-texto);
@@ -137,7 +147,7 @@ button[type="submit"] {
 }
 
 .tabela-cabecalho {
-  background-color: navy;
+  background-color: orange;
   color: azure;
   border-bottom: 2px;
 }
@@ -147,7 +157,7 @@ button[type="submit"] {
   padding: 0.5rem 1rem;
   border: 2px;
   border: none;
-  background-color: navy;
+  background-color: orange;
   font-family: var(--font-texto);
   font-size: large;
   color: azure;
@@ -169,4 +179,5 @@ button[type="submit"] {
 .login {
   display: flex;
   flex-direction: column;
+  align-items: center;
 }

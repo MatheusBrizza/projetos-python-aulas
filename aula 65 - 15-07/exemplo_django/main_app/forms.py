@@ -5,6 +5,11 @@ class ContatoForm(forms.ModelForm):
     class Meta:
         model = Contato
         fields = ['nome', 'email', 'assunto','mensagem']
+        widgets = {
+            'nome': forms.TextInput(attrs={'placeholder': 'Digite seu nome', 'class': 'form-control'}),
+            'email': forms.EmailInput(attrs={'placeholder': 'Digite seu email', 'class': 'form-control'}),
+            'mensagem': forms.Textarea(attrs={'placeholder': 'Digite sua mensagem', 'class': 'form-control'}),
+        }
 
     OPCOES_ASSUNTO = [
         ('', 'Escolha uma opção'),
@@ -16,9 +21,4 @@ class ContatoForm(forms.ModelForm):
     ]
     assunto = forms.ChoiceField(choices=OPCOES_ASSUNTO)
     
-    def clean_categoria(self):
-        data = self.cleaned_data['assunto']
-        if data == '':
-            raise forms.ValidationError("Este campo é obrigatório.")
-        return data
         

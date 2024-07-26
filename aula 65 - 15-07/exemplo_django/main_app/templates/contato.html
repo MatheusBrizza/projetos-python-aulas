@@ -4,7 +4,18 @@ Contato
 {%endblock%}
 {% block conteudo%}
 <section>
-    <div class="flex-container">
+    <div class="container">
+        <h1>Fale Conosco</h1>
+        <div class="container-texto">
+            <p>O Senac-RS tem a maior satisfação em atendê-lo.</p>
+            <p>Importante: preencha corretamente os campos do formulário a seguir, para que possamos lhe dar um retorno.
+            </p>
+            <p>Todos os campos são obrigatórios.</p>
+        </div>
+    </div>
+</section>
+<section>
+    <div class="flex-container" style="margin-top: 0px;">
         <form method="POST">
             <h1>Informe seus dados</h1>
             {% csrf_token %}
