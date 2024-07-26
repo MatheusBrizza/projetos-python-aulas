@@ -52,11 +52,11 @@ h2 {
   margin-bottom: 40px;
   font-family: var(--font-texto);
   font-size: 1.8rem;
-  color: azure;
+
 }
 
 h1, h2, h3, p {
-  color: azure;
+  color: black;
 }
 
 p {
@@ -169,25 +169,4 @@ button[type="submit"] {
 .login {
   display: flex;
   flex-direction: column;
-}
-#nome,
-#email,
-#pedido,
-#senha {
-  width: 350px;
-  padding: .9rem 1.25rem;
-  margin-bottom: 20px;
-  border: 1px solid rgba(0, 0, 0, 0.15);
-  background-color: rgba(0, 0, 0, 0.4);
-  background-clip: padding-box;
-  font-size: 1.15rem;
-  color: azure;
-  font-family: var(--font-texto);
-}
-
-#nome::placeholder,
-#email::placeholder,
-#pedido::placeholder,
-#senha::placeholder {
-  color: azure;
 }
