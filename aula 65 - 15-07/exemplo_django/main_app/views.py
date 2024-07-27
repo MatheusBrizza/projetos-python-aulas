@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from .forms import ContatoForm
+from .forms import ContatoForm, UsuarioForm
 from main_app.bd_config import conectarDB
 from django.http import HttpResponseRedirect
 from django.contrib import messages
@@ -62,7 +62,7 @@ def contato(request):
                 return HttpResponseRedirect('/')
             except Exception as e:
                 print(f'Erro ao salvar seu Contato: mensagem {e}')
-                mensagem_erro = "Ocorreu um erro ao processar o seu pedido. Tente novamente mais tarde."
+                mensagem_erro = "Ocorreu um erro ao processar o seu contato. Tente novamente mais tarde."
                 return render(request, 'erro.html', mensagem_erro=mensagem_erro), 500
             finally:
                 if connector is not None:
@@ -114,7 +114,6 @@ def finalizar_atendimento(request, id):
         connector = conectarDB()
         cursor = connector.cursor()
         
-        # Busca os detalhes do contato
         cursor.execute('SELECT nome, email, assunto, mensagem FROM contatos WHERE id = %s;', (int(id),))
         contato = cursor.fetchone()
 
@@ -136,7 +135,6 @@ def finalizar_atendimento(request, id):
             }
         })
 
-# TODO: criar tela que mostra uma tabela com o contato + a resposta do usuário
 def mostrar_resposta(request, id):
     if not request.session.get('usuario_id'):
         return redirect('login')
@@ -144,8 +142,6 @@ def mostrar_resposta(request, id):
         usuario_id = request.session.get('usuario_id')
         connector = conectarDB()
         cursor = connector.cursor()
-
-        # Busca os detalhes do contato e a resposta
         cursor.execute('''
             SELECT c.nome, c.email, c.assunto, c.mensagem, uc.resposta 
             FROM contatos c
@@ -154,7 +150,6 @@ def mostrar_resposta(request, id):
         ''', (int(id), int(usuario_id)))
         contato = cursor.fetchone()
 
-        # Renderiza o template com os detalhes do contato e a resposta
         return render(request, 'mostrar_resposta.html', {
             'contato': {
                 'nome': contato[0],
@@ -181,23 +176,32 @@ def novo_usuario(request):
         return redirect('login')
     else:
         if request.method == 'POST':
-            nome = request.POST.get('nome')
-            email = request.POST.get('email')
-            senha = request.POST.get('senha')
-            
-            if not all([nome, email, senha]):
-                return render(request, 'novo_usuario.html')
-            
-            connector = conectarDB()
-            cursor = connector.cursor()
-            cursor.execute('INSERT INTO usuarios SET nome = %s, email = %s, senha = %s;', (nome, email, senha))
-            connector.commit()
-            cursor.close()
-            connector.close()
-            
-            return redirect('index')
-        
-        return render(request, 'novo_usuario.html')
+            form = UsuarioForm(request.POST)
+            if form.is_valid():
+                try:
+                    connector = conectarDB()
+                    
+                    nome = form.cleaned_data['nome']
+                    email = form.cleaned_data['email']
+                    senha = form.cleaned_data['senha']
+                                
+                    cursor = connector.cursor()
+                    cursor.execute('INSERT INTO usuarios SET nome = %s, email = %s, senha = %s;', (nome, email, senha))
+                    connector.commit()
+                    
+                    return HttpResponseRedirect('/lista_usuarios')
+                except Exception as e:
+                    print(f"Erro ao salvar Usuário: {e}")
+                    mensagem_erro = "Ocorreu um erro ao processar o seu contato. Tente novamente mais tarde."
+                    return render(request, 'erro.html', mensagem_erro=mensagem_erro), 500
+                finally:
+                    if connector is not None:
+                        connector.close()
+            else:
+                return render(request, 'novo_usuario.html', {'form':form})
+        else:
+            form = UsuarioForm()
+            return render(request, 'novo_usuario.html', {'form':form})
     
 def editar_usuario(request, id):
     if not request.session.get('usuario_id'):

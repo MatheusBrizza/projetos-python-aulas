@@ -11,4 +11,9 @@ class Contato(models.Model):
         ('RECLAMACOES', 'Reclamações')
     ])
     mensagem = models.TextField()
+    
+class Usuario(models.Model):
+    nome = models.CharField(max_length=255)
+    email = models.EmailField()
+    senha = models.CharField(max_length=30)
 # Create your models here.

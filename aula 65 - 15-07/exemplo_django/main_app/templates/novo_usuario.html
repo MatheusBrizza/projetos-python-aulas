@@ -9,21 +9,8 @@ Cadastro de usuário
 
         <form method="POST">
             {% csrf_token %}
-            <div class="login">
-                <input class="inputs" type="text" name="nome" placeholder="Nome usuário">
-                <input class="inputs" type="email" name="email" placeholder="Email">
-                <input class="inputs" type="password" name="senha" placeholder="Senha">
-
-                <button type="submit">Cadastrar</button>
-            </div>
-            <script>
-                $(document).ready(function () {
-                    $('input[name="nome"]').val('');
-                    $('input[name="email"]').val('');
-                    $('input[name="senha"]').val('');
-                });
-            </script>
-
+            {{form.as_p}}
+            <button type="submit">Cadastrar</button>
         </form>
     </div>
 </section>
