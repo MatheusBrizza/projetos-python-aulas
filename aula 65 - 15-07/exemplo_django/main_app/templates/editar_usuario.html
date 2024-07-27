@@ -4,13 +4,14 @@ Editar Usuario
 {% endblock %}
 {% block conteudo %}
 {%load static%}
+
 <body>
     <section>
         <div class="flex-container">
             <h1>Editando usuário</h1>
 
             <form action="/editar_usuario/{{id}}" method="POST">
-                {% csrf_token %}                
+                {% csrf_token %}
                 <div class="login">
                     <input class="inputs" type="text" name="nome" placeholder="Nome">
                     <input class="inputs" type="email" name="email" placeholder="Email">
@@ -18,7 +19,6 @@ Editar Usuario
                     <button type="submit">Atualizar</button>
                 </div>
                 <script>
-                    //Limpa os campos do formulário ao entrar na tela
                     $(document).ready(function () {
                         $('input[name="nome"]').val('');
                         $('input[name="email"]').val('');

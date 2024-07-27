@@ -3,7 +3,6 @@
 
 <head>
     <meta charset="UTF-8">
-    
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>
         {% block titulo %}
@@ -24,24 +23,24 @@
                 <a href="/contato"> Fale conosco</a>
             </li>
             {% if request.session.usuario_id %}
-                <li>
-                    <a href="/contatos">Lista de contatos</a>
-                </li>
-                <li>
-                    <a href="/meus_contatos">Meus contatos</a>
-                </li>
-                {% if request.session.usuario_nome == 'ADMIN' %}
-                    <li>
-                        <a href="/lista_usuarios">Lista usuarios</a>
-                    </li>
-                {%endif%}
-                <li>
-                    <a href="/logout">Logout</a>
-                </li>
+            <li>
+                <a href="/contatos">Lista de contatos</a>
+            </li>
+            <li>
+                <a href="/meus_contatos">Meus contatos</a>
+            </li>
+            {% if request.session.usuario_nome == 'ADMIN' %}
+            <li>
+                <a href="/lista_usuarios">Lista usuarios</a>
+            </li>
+            {%endif%}
+            <li>
+                <a href="/logout">Logout</a>
+            </li>
             {% else %}
-                <li>
-                    <a href="/login">Login</a>
-                </li>
+            <li>
+                <a href="/login">Login</a>
+            </li>
             {%endif%}
         </ul>
     </nav>
