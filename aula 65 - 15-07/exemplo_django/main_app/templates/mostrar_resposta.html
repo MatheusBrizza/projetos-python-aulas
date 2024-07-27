@@ -1,0 +1,35 @@
+{% extends "navbar.html" %}
+{% block titulo %}
+Lista usuarios
+{% endblock %}
+{% block conteudo %}
+<section class="container">
+    <h1>Resposta do Atendimento</h1>
+    <section class="tabela-contatos">
+        <table>
+            <thead class="tabela-cabecalho">
+                <tr>
+                    <th>Nome</th>
+                    <th>Email</th>
+                    <th>Assunto</th>
+                    <th>Mensagem</th>
+                    <th>Resposta</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>{{ contato.nome }}</td>
+                    <td>{{ contato.email }}</td>
+                    <td>{{ contato.assunto }}</td>
+                    <td>{{ contato.mensagem }}</td>
+                    <td>{{ contato.resposta }}</td>
+                </tr>
+            </tbody>
+        </table>
+    </section>
+    <div class="botao-container">
+        <a href="/meus_contatos" class="botao">Voltar</a>
+    </div>
+</section>
+
+{% endblock %}

@@ -27,9 +27,10 @@ Meus contatos
                     <td>{{ contato.5 }}</td>
                     <td>
                         {% if contato.5 == 'Finalizado' %}
-                        <a href="" class="botao">Finalizado</a>
+                        <a href="" class="botao finalizado" onclick="return false">Finalizado</a>
+                        <a href="/mostrar_resposta/{{ contato.0 }}" class="botao">Visualizar resposta</a>
                         {% elif contato.5 == 'Em Atendimento' %}
-                        <a href="/finalizar_contato/{{ contato.0 }}" class="botao">Finalizar contato</a>                        
+                        <a href="/finalizar_atendimento/{{ contato.0 }}" class="botao">Finalizar atendimento</a>
                         {% endif %}
                     </td>
                 </tr>

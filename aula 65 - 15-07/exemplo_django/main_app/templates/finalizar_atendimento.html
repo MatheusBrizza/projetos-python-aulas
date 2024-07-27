@@ -1,0 +1,39 @@
+{% extends "navbar.html" %}
+{%block titulo%}
+Contato
+{%endblock%}
+{% block conteudo%}
+<section class="container">
+    <h1>Finalizar Atendimento</h1>
+    <section class="tabela-contatos">
+        <table>
+            <thead class="tabela-cabecalho">
+                <tr>
+                    <th>Nome</th>
+                    <th>Email</th>
+                    <th>Assunto</th>
+                    <th>Mensagem</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>{{ contato.nome }}</td>
+                    <td>{{ contato.email }}</td>
+                    <td>{{ contato.assunto }}</td>
+                    <td>{{ contato.mensagem }}</td>
+                </tr>
+            </tbody>
+        </table>
+    </section>
+    <section>
+        <form method="post">
+            {% csrf_token %}
+            <div class="resposta-container">
+                <textarea class="inputs" name="resposta" rows="5" cols="50"
+                    placeholder="Resposta do usuário"></textarea><br>
+                <button type="submit" class="botao">Finalizar Atendimento</button>
+            </div>
+        </form>
+    </section>
+</section>
+{% endblock %}

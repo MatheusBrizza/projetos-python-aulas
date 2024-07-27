@@ -29,9 +29,11 @@ urlpatterns = [
     path('contatos/', views.contatos, name='contatos'),
     path('atender_contato/<int:id>/', views.atendimento, name='atendimento'),
     path('meus_contatos/', views.listar_meus_contatos, name='meus_contatos'),
-    path('finalizar_contato/<int:id>', views.finalizar_contato, name='finalizar_contato'),
+    path('finalizar_atendimento/<int:id>', views.finalizar_atendimento, name='finalizar_atendimento'),
+    path('mostrar_resposta/<int:id>', views.mostrar_resposta, name='mostrar_resposta'),
     path('lista_usuarios/', views.listar_usuarios, name='listar_usuarios'),
     path('novo_usuario/', views.novo_usuario, name='novo_usuario'),
     path('editar_usuario/<int:id>', views.editar_usuario, name='editar_usuario'),
     path('excluir_usuario/<int:id>', views.excluir_usuario, name='excluir_usuario'),
+
 ]

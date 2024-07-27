@@ -89,7 +89,7 @@ def atendimento(request, id):
         connector = conectarDB()
         cursor = connector.cursor()
         cursor.execute('UPDATE contatos SET situacao = %s WHERE id = %s;', ("Em Atendimento", int(id)))
-        cursor.execute('INSERT INTO usuario_contato (usuario_id, contato_id, situacao) VALUES(%s, %s, %s);', (int(usuario_id), int(id), "Em Atendimento"))
+        cursor.execute('INSERT INTO usuario_contato (usuario_id, contato_id, situacao, resposta) VALUES(%s, %s, %s, %s);', (int(usuario_id), int(id), "Em Atendimento", ""))
         connector.commit()
         connector.close()
     
@@ -109,19 +109,62 @@ def listar_meus_contatos(request):
         contatos = cursor.fetchall()
         return render(request, 'meus_contatos.html', {"contatos":contatos})
 
-def finalizar_contato(request, id):
+def finalizar_atendimento(request, id):
+        usuario_id = request.session.get('usuario_id')
+        connector = conectarDB()
+        cursor = connector.cursor()
+        
+        # Busca os detalhes do contato
+        cursor.execute('SELECT nome, email, assunto, mensagem FROM contatos WHERE id = %s;', (int(id),))
+        contato = cursor.fetchone()
+
+        if request.method == "POST":
+            resposta = request.POST.get('resposta')
+            cursor.execute('UPDATE contatos SET situacao = %s WHERE id = %s;', ("Finalizado", int(id)))
+            connector.commit()
+
+            cursor.execute('UPDATE usuario_contato SET situacao = %s, resposta = %s WHERE usuario_id = %s AND contato_id = %s;', ("Finalizado", resposta, int(usuario_id), int(id)))
+            connector.commit()
+            return redirect('meus_contatos')
+
+        return render(request, 'finalizar_atendimento.html', {
+            'contato': {
+                'nome': contato[0],
+                'email': contato[1],
+                'assunto': contato[2],
+                'mensagem': contato[3],
+            }
+        })
+
+# TODO: criar tela que mostra uma tabela com o contato + a resposta do usuário
+def mostrar_resposta(request, id):
     if not request.session.get('usuario_id'):
         return redirect('login')
     else:
         usuario_id = request.session.get('usuario_id')
         connector = conectarDB()
         cursor = connector.cursor()
-        cursor.execute('UPDATE contatos SET situacao = %s WHERE id = %s;', ("Finalizado", int(id)))
-        connector.commit()
-        cursor.execute('UPDATE usuario_contato SET situacao = %s WHERE usuario_id = %s AND contato_id = %s;', ("Finalizado", int(usuario_id), int(id)))
-        connector.commit()
-        return redirect('meus_contatos')
 
+        # Busca os detalhes do contato e a resposta
+        cursor.execute('''
+            SELECT c.nome, c.email, c.assunto, c.mensagem, uc.resposta 
+            FROM contatos c
+            JOIN usuario_contato uc ON c.id = uc.contato_id
+            WHERE c.id = %s AND uc.usuario_id = %s;
+        ''', (int(id), int(usuario_id)))
+        contato = cursor.fetchone()
+
+        # Renderiza o template com os detalhes do contato e a resposta
+        return render(request, 'mostrar_resposta.html', {
+            'contato': {
+                'nome': contato[0],
+                'email': contato[1],
+                'assunto': contato[2],
+                'mensagem': contato[3],
+                'resposta': contato[4],
+            }
+        })
+        
 def listar_usuarios(request):
     if not request.session.get('usuario_id'):
         return redirect('login')

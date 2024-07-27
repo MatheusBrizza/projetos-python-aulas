@@ -105,7 +105,7 @@ p {
   /* background-color: var(--cor-fundo); */
 }
 
-.inputs, p>input, p>textarea, p>select  {
+.inputs, p>input, p>textarea, p>select {
   width: 350px;
   padding: .9rem 1.25rem;
   margin-bottom: 20px;
@@ -166,17 +166,17 @@ button[type="submit"] {
 .excluir {
   background-color: red;
 }
+
+.finalizado {
+  background-color: lightgray;
+}
+
 .botao-container {
   display: flex;
   justify-content: center;
 }
 
-.botoes-relatorios {
-  display: flex;
-  justify-content: space-evenly;
-}
-
-.login {
+.login, .resposta-container {
   display: flex;
   flex-direction: column;
   align-items: center;
