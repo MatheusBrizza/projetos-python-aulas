@@ -53,7 +53,7 @@ def contato(request):
                 email = form.cleaned_data['email']
                 assunto = form.cleaned_data['assunto']
                 mensagem = form.cleaned_data['mensagem']
-
+                
                 cursor = connector.cursor()
                 cursor.execute('INSERT INTO contatos (nome, email, assunto, mensagem, situacao) VALUES (%s, %s, %s, %s, %s);', (nome, email, assunto, mensagem, "Não atendido"))
                 connector.commit()
@@ -184,6 +184,9 @@ def novo_usuario(request):
             nome = request.POST.get('nome')
             email = request.POST.get('email')
             senha = request.POST.get('senha')
+            
+            if not all([nome, email, senha]):
+                return render(request, 'novo_usuario.html')
             
             connector = conectarDB()
             cursor = connector.cursor()
