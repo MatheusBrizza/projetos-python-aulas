@@ -24,14 +24,14 @@
             </li>
             {% if request.session.usuario_id %}
             <li>
-                <a href="/contatos">Lista de contatos</a>
+                <a href="/contatos">Lista de solicitações</a>
             </li>
             <li>
-                <a href="/meus_contatos">Meus contatos</a>
+                <a href="/meus_contatos">Meus atendimentos</a>
             </li>
             {% if request.session.usuario_nome == 'ADMIN' %}
             <li>
-                <a href="/lista_usuarios">Lista usuarios</a>
+                <a href="/lista_usuarios">Lista de usuarios</a>
             </li>
             {%endif%}
             <li>
